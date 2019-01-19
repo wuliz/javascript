@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<input type="text" size="25" maxlength="50" value="initial valuedddd">
+		<textarea rows="25" cols="5">initial value</textarea>
+		<input type="text" name="tel1" id="txtTel1" maxlength="3"> 
+<input type="text" name="tel2" id="txtTel2" maxlength="3"> 
+<input type="text" name="tel3" id="txtTel3" maxlength="4"> 
+
+<form>
+	<input type="text" name="username" required>
+	<input type="email" placeholder="请输入email" />
+	<input type="url" placeholder="请输入url" />
+	<input type="number" min="5" max="100" step="5">
+	<input type="text" pattern="\d+" name="count"> 
+	<button type="submit">提交</button>
+</form>
+	</body>
+	<script>
+		//HTMl的两种文本框：<input> <textarea>
+		//input ：size:可显示字符个数，maxlength:最长可输入字符
+		//textarea: ，rows 特性指定的是文本框的字符行数，而 cols 特性指定的是文本框的字符列数
+		//注意：虽然文本框的形式不同，但他们的值都保留在value中
+		var inp = document.querySelector("input");
+		console.log(inp.value); //"initial value"
+		var textarea = document.querySelector("textarea");
+		console.log(textarea.value); //"initial value"
+
+		//选择文本
+		//inp.select();//选中文本框的文本
+
+		//select事件
+		inp.onselect = function(event) {
+				console.log("我被选中了0");
+				var text = getSelectText(this);
+				console.log(text);
+			}
+			//取得选择的 文本
+		function getSelectText(textbox) {
+			return textbox.value.substring(textbox.selectionStart, textbox.selectionEnd);
+		}
+		//选择部分文本
+		//除了select()方法外，
+		/*所有文本框都有一个setSelectionRange()
+方法。这个方法接收两个参数：要选择的第一个字符的索引和要选择的最后一个字符之后的字符的索引
+（类似于 substring()方法的两个参数）。来看一个例子。*/
+		//选择所有文本
+		inp.setSelectionRange(0, inp.value.length);
+		//选择前 3 个字符
+		inp.setSelectionRange(0, 3); //"Hel" 
+		//选择第 4 到第 6 个字符
+		inp.setSelectionRange(4, 7); //"o w"
+
+		//过滤输入
+
+		//操作剪贴板
+		/*var EventUtil = {
+			//省略的代码
+			getClipboardText: function(event) {
+				var clipboardData = (event.clipboardData || window.clipboardData);
+				return clipboardData.getData("text");
+			},
+			//省略的代码
+
+			setClipboardText: function(event, value) {
+				if(event.clipboardData) {
+					return event.clipboardData.setData("text/plain", value);
+
+				} else if(window.clipboardData) {
+					return window.clipboardData.setData("text", value);
+				}
+			},
+			//省略的代码
+		};*/
+
+		//自动焦点切换
+		/*(function() {
+			function tabForward(event) {
+				event = EventUtil.getEvent(event);
+				var target = EventUtil.getTarget(event);
+				if(target.value.length == target.maxLength) {
+					var form = target.form;
+					for(var i = 0, len = form.elements.length; i < len; i++) {
+						if(form.elements[i] == target) {
+							if(form.elements[i + 1]) {
+								form.elements[i + 1].focus();
+							}
+							return;
+						}
+					}
+				}
+			}
+			var textbox1 = document.getElementById("txtTel1");
+			var textbox2 = document.getElementById("txtTel2");
+			var textbox3 = document.getElementById("txtTel3");
+			EventUtil.addHandler(textbox1, "keyup", tabForward);
+			EventUtil.addHandler(textbox2, "keyup", tabForward);
+			EventUtil.addHandler(textbox3, "keyup", tabForward);
+		})();*/
+		
+		//THTML5约束验证API
+		//当JavaScript程序不起作用时，可以用html元素自带属性验证
+		//必填字段  表单字段得required属性
+		//何标注有 required 的字段，在提交表单时都不能空着。
+		var isRequiredSupported = "required" in document.createElement("input"); 
+		console.log(isRequiredSupported);//true
+		
+		//HTML的其他输入类型：email和url:"email"类型要求输入的文本必须符合电子邮件地址的模式:而"url"类型要求输入的文本必须符合 URL 的模式。
+		//还有一些支持情况不太好的类型："number"、"range"、"datetime"、"datetime-local"、"date"、"month"、"week"，还有"time"。
+		
+		//对所有这些数值类型的输入元素
+		//可以指定min ，max,step属性
+		/*可以指定 min 属性（最小的可能值）、max 属性（最大的可能值）
+和 step 属性（从 min 到 max 的两个刻度间的差值）。例如，想让用户只能输入 0 到 100 的值，而且这
+个值必须是 5 的倍数，可以这样写代码*/
+
+		//输入模式
+		//pattern属性
+	</script>
+	
+
+</html>

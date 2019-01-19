@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			//ECMAScript 是 JavaScript 的核心，但如果要在 Web 中使用 JavaScript，那么 BOM（浏览器对象模型）则无疑才是真正的核心。
+
+			//window对象：，window 对象有双重角色，它既是通过 JavaScript 访问浏览器窗口的一个接口，又是 ECMAScript 规定的 Global 对象
+			//全局作用域
+			var age = 29;
+
+			function sayAge() {
+				console.log(this.age);
+			}
+			console.log(window.age); //29 
+			sayAge(); //29 
+			window.sayAge(); //29
+
+			/*			抛开全局变量会成为 window 对象的属性不谈，定义全局变量与在 window 对象上直接定义属性还
+			是有一点差别：全局变量不能通过 delete 操作符删除，而直接在 window 对象上的定义的属性可以。
+			例如：*/
+			var age = 29;
+			window.color = "red";
+			//在 IE < 9 时抛出错误，在其他所有浏览器中都返回 false 
+			delete window.age;
+			//在 IE < 9 时抛出错误，在其他所有浏览器中都返回 true 
+			delete window.color; //returns true 
+			console.log(window.age); //29 
+			console.log(window.color); //undefind
+
+			//窗口关系及框架
+
+			console.log(window.valueOf())
+				//IE、Safari、Opera 和 Chrome 都提供了screenLeft 和 screenTop 属性，分别用于表示窗口相对于屏幕左边和上边的位置。
+				//Firefox 则在screenX 和 screenY 属性中提供相同的窗口位置信息，Safari 和 Chrome 也同时支持这两个属性
+				//窗口大小
+			var leftPos = (typeof window.screenLeft == "number") ?
+				window.screenLeft : window.screenX;
+			var topPos = (typeof window.screenTop == "number") ?
+				window.screenTop : window.screenY;
+			console.log(leftPos + ":" + topPos);
+
+			var pageWidth = window.innerWidth,
+				pageHeight = window.innerHeight;
+			console.log(pageWidth + ":" + pageHeight);
+			//窗口位置
+			//取得页面视口的大小
+			if(typeof pageWidth != "number") {
+				if(document.compatMode == "CSS1Compat") {
+					pageWidth = document.documentElement.clientWidth;
+					pageHeight = document.documentElement.clientHeight;
+				} else {
+					pageWidth = document.body.clientWidth;
+					pageHeight = document.body.clientHeight;
+				}
+			}
+			console.log(pageWidth + ":" + pageHeight);
+
+			//导航和打开窗口
+			//window.open()方法既可以导航到一个特定的 URL，也可以打开一个新的浏览器窗口
+			/*这个
+方法可以接收 4 个参数：要加载的 URL、窗口目标、一个特性字符串以及一个表示新页面是否取代浏览
+器历史记录中当前加载页面的布尔值。通常只须传递第一个参数，最后一个参数只在不打开新窗口的情
+况下使用。*/
+			//window.open("http://baidu.com","newWindow","",false);
+			var wroxWin = window.open("http://www.wrox.com/", "wroxWindow",
+				"height=762,width=1920,top=10,left=10,resizable=yes", true);
+
+			//安全限制
+			//曾经有一段时间，广告商在网上使用弹出窗口达到了肆无忌惮的程度
+			/*Windows XP SP2 中的 IE6 对弹出窗口施加了多方面的安全限制，包括不允许在屏幕之外创建弹出窗
+口、不允许将弹出窗口移动到屏幕以外、不允许关闭状态栏等。IE7 则增加了更多的安全限制，如不允
+许关闭地址栏、默认情况下不允许移动弹出窗口或调整其大小。Firefox 1 从一开始就不支持修改状态栏，
+因此无论给 window.open()传入什么样的特性字符串，弹出窗口中都会无一例外地显示状态栏。后来
+的 Firefox 3 又强制始终在弹出窗口中显示地址栏。Opera 只会在主浏览器窗口中打开弹出窗口，但不允
+许它们出现在可能与系统对话框混淆的地方。*/
+
+			//弹出窗口屏蔽程序
+			//大多数浏览器都内置有弹出窗口屏蔽程序，而没有内置此类程序的浏览器，也可以安装 Yahoo! Toolbar 等带有内置屏蔽程序的实用工具
+			//如果弹出窗口是被浏览器内置程序屏蔽的，则返回null
+			var wroxWin = window.open("http://www.wrox.com", "_blank");
+			if(wroxWin == null) {
+				console.log("The popup was blocked!");
+			}
+			//如果是浏览器扩展或其他程序阻止的弹出窗口，那么 window.open()通常会抛出一个错误
+			//检测弹出窗口是被其他程序屏蔽的
+			var blocked = false;
+
+			try {
+				var wroxWin = window.open("http://www.wrox.com", "_blank");
+				if(wroxWin == null) {
+					blocked = true;
+				}
+			} catch(ex) {
+				blocked = true;
+			}
+			if(blocked) {
+				console.log("The popup was blocked!");
+			}
+
+			//间歇调用和超时调用
+			//JavaScript是单线程语言但它允许通过设置超时值和间歇时间值来调度代码在特定的时刻执行
+
+			//超时调用：setTimeout(func: Function, delay: Number, args: Object): Number
+			//第一个参数可以是字符串（会自动调用eval()方法）也可以是函数，
+			//第二个参数：执行代码前需要等待多少时间
+
+			//不建议传递字符串！
+			setTimeout("alert('Hello world!') ", 1000);
+			//推荐调用的方式
+			setTimeout(function() {
+				console.log("hello world")
+			}, 1000);
+
+			//虽然这两种调用方式都没有问题，但由于传递字符串可能导致性能损失，因此不建议以字符串作为第一个参数。
+			//调用 setTimeout()之后，该方法会返回一个数值 ID，表示超时调用。
+
+			var timeoutId = setTimeout(function() {
+				console.log("test")
+			}, 2000);
+			console.log("timeoutId:" + timeoutId); //"timeoutId":3
+			//注意：把它取消，就不会调用前面的函数
+			clearTimeout(timeoutId);
+
+			//间歇调用：setInterval():过它会按照指定的时间间隔重复执行代码，直至间歇调用被取消或者页面被卸载
+			//setInterval(code: String, interval: Number, args: Array): Number
+			//不建议传递字符串！
+			//setInterval("console.log('Hello world!') ", 10000);
+
+			//推荐的调用方式
+			/*setInterval(function() {
+				console.log("Hello world!");
+			}, 5000);*/
+			
+			//间歇调用实例
+			
+			/*var inter=null;
+			var num=0;
+			function circle(){
+				if(num!=10){
+					console.log("circle："+num);
+					num++;
+				}else{
+					clearInterval(circle);
+				}
+			}
+			var inter=setInterval(circle,2000);*/
+			
+			//系统对话框
+			//alert(),confirm(),prompt()
+			//用法：alert():警告对话框
+			//confirm():确认对话框
+			///prompt():输入信息
+			
+			window.alert("警告！");
+			console.log(window.confirm("确认要退出吗"));//点击确认返回true,点击取消返回false;
+			console.log(window.prompt("what is your name","zhangsan"));//点击确认返回输入框的值
+			console.log(window.prompt("what is your name","zhangsan"));//点击取消返回null
+			
+			window.print();//打印对话框
+			window.find();
+			
+			//总结：
+			//1、window对象具有双重身份：1、即游览器对象,而是global对象。
+			//注意：window的属性是可以删除的，不是显式加到window的属性是不能删除的
+			//2、获取window窗口的大小： document.documentElement.clientWidth;document.documentElement.clientHeight;或者document.body.clientWidth;document.body.clientHeight;
+			//3、获取窗口的位置：window.screenLeft+window.screenTop或window.screenX+window.screenY
+			//4、打开一个新窗口：window.open(url: URIString, name: String, features: String, replace: Boolean): Window
+			//注意：但由于广告泛滥的原因，很多浏览器有内置拦截程序
+			//5、间歇调用和超时调用；
+			//间歇调用：setInterval(function,number);每过一段时间执行
+			//超时调用：setTimeout(function,number):过多长时间执行，只执行一次
+			//6、系统对话框：alert(),confirm(),prompt();
+			
+		</script>
+	</head>
+
+	<body>
+		<div style="height:700px;"></div>
+	</body>
+
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		111111111dddddddddddddd
+	</body>
+	<script>
+	//消息接收时的处理程序
+		window.onmessage=function(event){
+			console.log(event.origin)//http://127.0.0.1:8020
+			console.log("2222222");
+			console.log(event.data);
+			//回执原发送消息者
+			event.source.postMessage("received!","http://127.0.0.1:8020/javascript/test/1.html")
+		}
+	</script>
+</html>

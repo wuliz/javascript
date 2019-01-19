@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<div id="div1" style="padding:50px;background: yellow;height:300px;">
+			<div id="div1son" style="margin:50px;background: indianred;width:50px;height:50px;"></div>
+		</div>
+		
+		<input type="text">
+	</body>
+	<script>
+		//事件类型
+		//web浏览器可能发生的事件有很多种，不同事件的类型具有不同的信息，而DOM级事件规定了以下几类事件
+		/* UI（User Interface，用户界面）事件，当用户与页面上的元素交互时触发；
+ 焦点事件，当元素获得或失去焦点时触发；
+ 鼠标事件，当用户通过鼠标在页面上执行操作时触发；
+ 滚轮事件，当使用鼠标滚轮（或类似设备）时触发；
+ 文本事件，当在文档中输入文本时触发；
+ 键盘事件，当用户通过键盘在页面上执行操作时触发；
+ 合成事件，当为 IME（Input Method Editor，输入法编辑器）输入字符时触发；
+ 变动（mutation）事件，当底层 DOM 结构发生变化时触发。
+ 变动名称事件，当元素或属性名变动时触发。此类事件已经被废弃，没有任何浏览器实现它们，
+因此本章不做介绍。*/
+		/*
+		 * OM3 级事件模块在 DOM2 级事件模块基础上重新定义了这些事件，也添加了一些新事件。包括
+		IE9 在内的所有主流浏览器都支持 DOM2 级事件。IE9 也支持 DOM3 级事件
+		 */
+
+		//UI事件如下
+		//DOMActive:表示元素被用户操作激活：DOM3已废除，但火狐和ie还支持，不建议使用
+		//load:当页面完全加载后在 window 上面触发，当所有框架都加载完毕时在框架集上面触发，当图像加载完毕时在<img>元素上面触发，或者当嵌入的内容加载完毕时在<object>元素上面触发
+		//unload:：当页面完全卸载后在 window 上面触发，当所有框架都卸载后在框架集上面触发，或者当嵌入的内容卸载完毕后在<object>元素上面触发
+		//abort：在用户停止下载过程时，如果嵌入的内容没有加载完，则在<object>元素上面触发
+		// error：当发生 JavaScript 错误时在 window 上面触发，当无法加载图像时在<img>元素上面触发，当无法加载嵌入内容时在<object>元素上面触发，或者当有一或多个框架无法加载时在框架集上面触发。第 17 章将继续讨论这个事件
+		//select：当用户选择文本框（<input>或<texterea>）中的一或多个字符时触发。第 14 章将继续讨论这个事件
+		///resize：当窗口或框架的大小变化时在 window 或框架上面触发。
+		//scroll：当用户滚动带滚动条的元素中的内容时，在该元素上面触发。<body>元素中包含所加载页面的滚动条
+
+		//判断浏览器是否支持DOm2事件
+
+		var issupport = document.implementation.hasFeature("HTMLEvents", "2.0");
+		var issupport3 = document.implementation.hasFeature("UI Event", "3.0");
+		console.log(issupport); //true
+		console.log(issupport3) //true
+		
+		//load事件
+		//应该在document下添加load事件
+		document.body.onload=function(){
+			console.log('我被加载了！');
+		}
+		window.resize=function(){
+			console.log("我的大小被改变了！");
+		}
+		
+		//焦点事件
+		var div1=document.getElementById("div1");
+		var div1son=document.getElementById("div1son");
+		
+		div1.onclick=function(){
+			console.log("div1被点击了！")
+		}
+		div1son.onclick=function(){
+			console.log("div1son被点击了！");
+		}
+		
+		div1.onmouseenter=function(){
+			console.log("div1被移入了！");
+		}
+		div1.onmouseleave=function(){
+			console.log("div1被移出了！");
+		}
+		div1son.onmouseenter=function(){
+			console.log("div1son被移入了！");
+		}
+		div1son.onmouseleave=function(){
+			console.log("div1son被移出了！");
+			
+		}
+		/*window.onmousemove=function(event){
+			console.log("-----------------");
+			console.log(event.clientX+":"+event.clientY);
+			console.log(event.pageX+":"+event.pageY);
+			console.log(event.screenX+":"+event.screenY);
+			
+		}*/
+		/*div1.onmouseover=function(){
+			console.log("div1被移入了！");
+		}
+		div1.onmouseout=function(){
+			console.log("div1被移出了！");
+		}
+		div1son.onmouseover=function(){
+			console.log("div1son被移入了！");
+		}
+		div1son.onmouseout=function(){
+			console.log("div1son被移出了！");
+		}*/
+		
+		//客户区坐标位置
+		//鼠标事件都是在浏览器视口中的特定位置上发生的。这个位置信息保存在事件对象的 clientX 和clientY 属性中。所有浏览器都支持这两个属性
+		
+		//页面坐标位置：pageX,pageY
+		//屏幕坐标位置：screenX,screenY
+		
+		//键盘与文本事件
+		//三个键盘事件：keydown,keypress,keyup
+		//一个文本事件：textInput
+		
+		var input=document.querySelector("input");
+		input.onkeydown=function(event){
+			console.log("1111111");
+			console.log(event.keyCode);
+		}
+	</script>
+
+</html>

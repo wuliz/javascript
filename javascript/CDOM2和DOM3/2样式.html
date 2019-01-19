@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#test {
+				color: blue;
+				font-family: "微软雅黑";
+				border: 1px solid red;
+			}
+		</style>
+	</head>
+
+	<div style="padding:10px;margin:20px;">
+		<div id="test" style="font-size: 18px;">11111</div>
+	</div>
+	<!--<div syle="padding:10px;"><iframe id="ifte" src="http://baidu.com" width="400" height="400"></iframe></div>-->
+	<div id="div1">
+		<p><b>Hello</b> world!</p>
+		<ul>
+			<li>List item 1</li>
+			<li>List item 2</li>
+			<li>List item 3</li>
+		</ul>
+	</div>
+
+	<body>
+
+	</body>
+	<script>
+		//三种样式：外部样式，嵌入样式，行内样式
+		//确认浏览器是否有dom2级样式能力
+		var supportsDOM2CSS = document.implementation.hasFeature("CSS", "2.0");
+		var supportsDOM2CSS2 = document.implementation.hasFeature("CSS2", "2.0");
+		console.log(supportsDOM2CSS); //true
+		console.log(supportsDOM2CSS2); //true
+
+		//访问元素的样式
+		//每一个拥有style属性的元素有对应一个CSSStyleDeclaration实例，包含该元素的样式信息（除外部样式和嵌入样式）
+
+		//css属性对于JavaScript属性
+		/*background-image  对应 style.backgroundImage
+		color  对应 style.color
+		font-family 对应 style.fontFamily*/
+		/*对于使用短划线（分隔不同的词汇，例如 background-image）的 CSS 属性
+名，必须将其转换成驼峰大小写形式，才能通过 JavaScript 来访问*/
+
+		//注意：float属性不能直接访问：因为是JavaScript中的保留字，“DOM2 级样式”规范规定样式对象上相应的属性名应该是 cssFloat
+		//示例：对元素操作style属性
+
+		var test = document.getElementById("test");
+		console.log(test.style) //CSSStyleDeclaration实例
+
+		//修改样式
+		test.style.background = "yellowgreen";
+		//改变大小
+		test.style.width = "100px";
+		test.style.height = "200px";
+		//指定边框
+		test.style.border = "1px solid black";
+
+		//取得样式
+		console.log(test.style.fontSize); //18px;
+
+		//Dom样式属性和方法
+		console.log(test.style.cssText); //通过它能够访问到 style 特性中的 CSS 代码。:font-size: 18px; width: 100px; height: 200px; border: 1px solid black; background: rgb(154, 205, 50);
+		console.log(test.style.length); //30
+		console.log(test.style.item(5)); //background-attachment
+		//console.log(test.style.getPropertyCSSValue(test.style[3]));
+		var prop, value, i, len;
+		for(i = 0, len = test.style.length; i < len; i++) {
+			prop = test.style[i]; //或者 myDiv.style.item(i) 
+			value = test.style.getPropertyValue(prop);
+
+			console.log(prop + " : " + value);
+		}
+		console.log("-----------------------------------------------------------------")
+			//for(i = 0, len = test.style.length; i < len; i++) {
+		prop = test.style[i]; //或者 myDiv.style.item(i) 
+		//value = test.style.getPropertyCSSValue(prop);
+		//console.log(prop + " : " + value.cssText + " (" + value.cssValueType + ")");
+		//}
+
+		//虽然style属性对象包含了行内样式的所有信息，但它不包含外部样式和内嵌样式
+		//““DOM2 级样式”增强了 document.defaultView，提供了getComputedStyle()方法
+		var computStyle = document.defaultView.getComputedStyle(test);
+		"[object CSSStyleDeclaration]"
+		console.log(computStyle.border) //1px solid rgb(0, 0, 0)
+		console.log(computStyle.fontFamily); //"微软雅黑"
+
+		//操作样式表
+		//CSSStyleSheet 类型表示的是样式表，包括通过<link>元素包含的样式表和在<style>元素中定义的样式表。
+		var supportsDOM2StyleSheets = document.implementation.hasFeature("StyleSheets", "2.0");
+		var sheet = null;
+		for(var i = 0; i < document.styleSheets.length; i++) {
+			sheet = document.styleSheets[i];
+			console.log(sheet.href); //
+		}
+
+		//元素大小:边框+内边距+内容
+		//偏移量：
+		//4个属性：offsetWidth:元素的宽度
+		//offsetHeight:元素的高度
+		//offsetTop:元素具有高度的父元素的上高度
+		//offsetLest:元素距具有高度的父元素的左距离
+		/*offsetLeft 和 offsetTop 属性与包含元素有关，包含元素的引用保存在 offsetParent
+属性中。offsetParent 属性不一定与 parentNode 的值相等。例如，<td>元素的 offsetParent 是
+作为其祖先元素的<table>元素，因为<table>是在 DOM 层次中距<td>最近的一个具有大小的元素*/
+
+		//取得元素的offsetLeft
+		function getEelementLeft(element) {
+			var offsetLeft = element.offsetLeft;
+			var currentElement = element.offsetParent;
+			while(currentElement != null) {
+				offsetLeft += currentElement.offsetLeft;
+				currentElement = currentElement.offsetParent;
+			}
+			return offsetLeft;
+		}
+
+		function getElementTop(element) {
+			var actualTop = element.offsetTop;
+			var current = element.offsetParent;
+			while(current !== null) {
+				actualTop += current.offsetTop;
+				current = current.offsetParent;
+			}
+			return actualTop;
+		}
+
+		console.log(getEelementLeft(test) + ":" + getElementTop(test)); //8:8
+		console.log(test.offsetLeft + ":" + test.offsetTop); //8:8
+
+		//客户端大小：内容+内边距：客户区大小就是元素内部的空间大小，因此滚动条占用的空间不计算在内
+		function getViewport() {
+			if(document.compatMode == "BackCompat") {
+				return {
+					width: document.body.clientWidth,
+					height: document.body.clientHeight
+				};
+			} else {
+				return {
+					width: document.documentElement.clientWidth,
+					height: document.documentElement.clientHeight
+				};
+			}
+		}
+
+		//滚动大小
+		/*最后要介绍的是滚动大小（scroll dimension），指的是包含滚动内容的元素的大小。有些元素（例如
+<html>元素），即使没有执行任何代码也能自动地添加滚动条；但另外一些元素，则需要通过 CSS 的
+overflow 属性进行设置才能滚动。*/
+
+		/*var ifte = document.getElementById("#ifte");
+		console.log(ifte.scrollLeft);
+		console.log(ifte.scrollHeight);
+		console.log(ifte.scrollTop);
+		console.log(ifte.scrollWidth);*/
+
+		//DOM遍历：NodeIterator和TreeWalker
+		//使用下列代码可以检测浏览器对 DOM2 级遍历能力的支持情况。
+		var supportsTraversals = document.implementation.hasFeature("Traversal", "2.0");
+		var supportsNodeIterator = (typeof document.createNodeIterator == "function");
+		var supportsTreeWalker = (typeof document.createTreeWalker == "function");
+		4
+
+		//遍历id为div1的节点树
+		var div = document.getElementById("div1");
+		//第三个参数：是否过滤某个元素
+		var iterator = document.createNodeIterator(div, NodeFilter.SHOW_ELEMENT, null,false);
+
+		var node = iterator.nextNode();
+		while(node !== null) {
+			console.log(node.tagName); //输出标签名
+			node = iterator.nextNode();
+		}
+		console.log("---------------------------------")
+		//如果你指向遍历到li的元素
+		var filter=function(node){
+			return (node.tagName.toLowerCase()=="li")?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;
+		}
+		var iteror2=document.createNodeIterator(div,NodeFilter.SHOW_ELEMENT,filter,false);
+		var node = iteror2.nextNode();
+		while(node !== null) {
+			console.log(node.tagName); //输出标签名
+			node = iteror2.nextNode();
+		}
+		//console.log(NodeFilter);
+		
+		//TreeWalker
+		//TreeWalker 是 NodeIterator 的一个更高级的版本。除了包括 nextNode()和 previousNode()在内的相同的功能之外，这个类型还提供了下列用于在不同方向上遍历 DOM 结构的方法。
+		/*parentNode()：遍历到当前节点的父节点；
+ firstChild()：遍历到当前节点的第一个子节点；
+ lastChild()：遍历到当前节点的最后一个子节点；
+ nextSibling()：遍历到当前节点的下一个同辈节点；
+ previousSibling()：遍历到当前节点的上一个同辈节点*/
+	</script>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<button id="myBtn">myBtn</button>
+		<button id="btn2">拥有多个事件</button>
+		<a href="http://baidun.com">跳转到百度</a>
+	</body>
+	<script>
+		/*在触发 DOM 上的某个事件时，会产生一个事件对象 event，这个对象中包含着所有与事件有关的
+		信息。包括导致事件的元素、事件的类型以及其他与特定事件相关的信息。例如，鼠标操作导致的事件
+		对象中，会包含鼠标位置的信息，而键盘操作导致的事件对象中，会包含与按下的键有关的信息。所有
+		浏览器都支持 event 对象，但支持方式不同*/
+		var mybtn = document.getElementById("myBtn");
+		mybtn.onclick = function(event) {
+			console.log(event.type); //click
+		}
+		mybtn.addEventListener("click", function() {
+			console.log(this.id); //myBtn
+			console.log(event.bubbles) //ture
+			console.log(this == event.currentTarget); //true
+		}, false);
+		//当需要一个函数处理多个事件的时候，可以使用event.type
+		var btn2 = document.getElementById("btn2");
+		var handle = function(event) {
+			switch(event.type) {
+				case "click":
+					console.log("我被点击了");
+					break;
+				case "mouseover":
+					event.target.style.background = "red";
+					console.log("我被移入了");
+					break;
+				case "mouseout":
+					console.log("我被移出了");
+
+			}
+		}
+		btn2.onclick = handle;
+		btn2.onmouseover = handle;
+		btn2.onmouseout = handle;
+
+		//阻止默认行为:阻止a标签的跳转行为
+		var a = document.querySelector("a");
+		a.onclick = function(event) {
+				console.log(event.eventPhase); //2 
+				event.preventDefault();
+				//event.stopPropagation();
+			}
+			//stopPropagation()方法：法用于立即停止事件在 DOM 层次中的传播，即取消进一步的事件捕获或冒泡
+
+		document.body.onclick = function() {
+			console.log("body被点击了");
+			console.log(event.eventPhase); //3 
+
+		}
+		document.body.addEventListener("click", function(event) {
+			console.log(event.eventPhase); //1 
+		}, true);
+		
+		//event对象在事件执行时被创建，结束后被销毁
+	</script>
+
+</html>

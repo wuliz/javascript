@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script>
+		//早期：XML是存储和传输的标准，浏览器不能解析XML数据（开发人员自己写XML解析器）
+		//DOM规范的指定：方便浏览器使用XML,也为了桌面应用及服务端应用程序处理XML数据。
+		//因为DOM出现，所有浏览器都内置了对 XML 的原生支持（XML DOM），同时也提供了一系列相关的技术支持。
+
+		//浏览器对XML DOM的支持
+		/*
+		 * DOM2 级是第一个提到动态创建 XML DOM 概念的规范。DOM3
+级进一步增强了 XML DOM，新增了解析和序列化等特性。然而，当 DOM3 级规范的各项条款尘埃落
+定之后，大多数浏览器也都实现了各自不同的解决方案
+		 */
+
+		//1、DOM2级核心
+		//DOM2级在document.implementation 中引入了createDocument()方法。
+		//创建一个空白的 XML 文档
+		//var xmldom = document.implementation.createDocument(namespaceUri, root, doctype); 
+		//在通过 JavaScript 处理 XML 时，通常只使用参数 root，因为这个参数指定的是 XML DOM 文档元素的标签名
+		//而 namespaceUri 参数则很少用到，原因是在 JavaScrip 中管理命名空间比较困难。最后，doctype 参数用得就更少了
+		//因此，要想创建一个新的、文档元素为<root>的 XML 文档，可以使用如下代码
+		var xmldom = document.implementation.createDocument("", "root", null);
+		alert(xmldom.documentElement.tagName); //"root"
+		var child = xmldom.createElement("child");
+		xmldom.documentElement.appendChild(child);
+		//要检测浏览器是否支持 DOM2 级 XML，可以使用下面这行代码：
+		var hasXmlDom = document.implementation.hasFeature("XML", "2.0");
+
+		/*
+		 * 在实际开发中，很少需要从头开始创建一个 XML 文档，然后再使用 DOM 文档为其添加元素。更
+		常见的情况往往是将某个 XML 文档解析为 DOM 结构，或者反之。由于 DOM2 级规范没有提供这种功
+		能，因此就出现了一些事实标准
+		 */
+		//DOMParser类型
+		//为了将 XML 解析为 DOM 文档，Firefox 引入了 DOMParser 类型
+		/*在解析 XML 之前，首先必须创建一个 DOMParser 的实例，然后再调用
+		parseFromString()方法。这个方法接受两个参数：要解析的 XML 字符串和内容类型（内容类型始
+		终都应该是"text/xml"）。返回的值是一个 Document 的实例。来看下面的例子*/
+		var parser = new DOMParser();
+		var xmlDoucment = parser.parseFromString("<root><child/></root>", "text/xml");
+		console.log(xmlDoucment.documentElement.tagName); //root
+		console.log(xmlDoucment.documentElement.children[0].tagName); //child
+
+		var anotherChild = xmlDoucment.createElement("child");
+		xmlDoucment.documentElement.appendChild(anotherChild);
+		var children = xmlDoucment.getElementsByTagName("child");
+		alert(children.length); //2
+
+		//注意：DOMParser 只能解析格式良好的 XML，不能解析HTML文档
+
+		//XMLSerializer类型
+		//了 XMLSerializer 类型，提供了相反的功能：将 DOM文档序列化为 XML 字符串。
+		var serializer = new XMLSerializer();
+		var xml = serializer.serializeToString(xmlDoucment);
+		console.log(xml); //"<root><child/><child/></root>"
+
+		//IE8及之前版本中的xml
+		//事实上，IE 是第一个原生支持 XML 的浏览器，而这一支持是通过 ActiveX 对象实现的。为了便于桌面应用程序开发人员处理 XML，微软创建了 MSXML 库
+		/*但微软并没有针对 JavaScript 创建不同的对象，而只是让 Web 开发人员能够通过浏览器访问相同的对象
+		 */
+		/*
+		 * 而只是让 Web 开发人员能够通过浏览器访问相同的对象。
+第 8 章曾经介绍过 ActiveXObject 类型，通过这个类型可以在 JavaScript 中创建 ActiveX 对象的
+实例。同样，要创建一个 XML 文档的实例，也要使用 ActiveXObject 构造函数并为其传入一个表示
+XML 文档版本的字符串。有 6 种不同的 XML 文档版本可以供选择
+		 */
+		/*
+		 *  Microsoft.XmlDom：最初随同 IE 发布；不建议使用。
+ MSXML2.DOMDocument：为方便脚本处理而更新的版本，建议仅在特殊情况下作为后备版本
+使用。
+ MSXML2.DOMDocument.3.0：为了在 JavaScript 中使用，这是最低的建议版本。
+ MSXML2.DOMDocument.4.0：在通过脚本处理时并不可靠，使用这个版本可能导致安全警告。
+ MSXML2.DOMDocument.5.0：在通过脚本处理时并不可靠，使用这个版本同样可能导致安全
+警告。
+ MSXML2.DOMDocument.6.0：通过脚本能够可靠处理的最新版本。
+		 */
+		//微软只推荐使用 MSXML2.DOMDocument.6.0 或 MSXML2.DOMDocument.3.0；
+		//通过尝试创建每个版本的实例并观察是否有错误发生，可以确定哪个版本可用。例如：
+		function createDocument() {
+			if(typeof arguments.callee.activeXString != "string") {
+				var versions = ["MSXML2.DOMDocument.6.0", "MSXML2.DOMDocument.3.0",
+						"MSXML2.DOMDocument"
+					],
+					i, len;
+				for(i = 0, len = versions.length; i < len; i++) {
+					try {
+						new ActiveXObject(versions[i]);
+						arguments.callee.activeXString = versions[i];
+						break;
+					} catch(ex) {
+						//跳过
+					}
+				}
+			}
+			return new ActiveXObject(arguments.callee.activeXString);
+		}
+		/*
+		 * 要解析 XML 字符串，首先必须创建一个 DOM 文档，然后调用 loadXML()方法。新创建的 XML
+文档完全是一个空文档，因而不能对其执行任何操作。为 loadXML()方法传入的 XML 字符串经解析之
+后会被填充到 DOM 文档中。来看下面的例子
+		 */
+		var xmldom = createDocument();
+		xmldom.loadXML("<root><child/></root>");
+		alert(xmldom.documentElement.tagName); //"root" 
+		alert(xmldom.documentElement.firstChild.tagName); //"child" 
+		var anotherChild = xmldom.createElement("child");
+		xmldom.documentElement.appendChild(anotherChild);
+		var children = xmldom.getElementsByTagName("child");
+		alert(children.length); //2
+
+		//要指定加载文档的方式，可以设置 async 属性，true 表示异步，false表示同步（默认值为 true）
+
+		//跨浏览器处理XML
+		//下面这个函数可以在所有四种主要浏览器中使用
+		function parseXml(xml){ 
+		var xmldom = null;
+		if(typeof DOMParser != "undefined") {
+			xmldom = (new DOMParser()).parseFromString(xml, "text/xml");
+			var errors = xmldom.getElementsByTagName("parsererror");
+			if(errors.length) {
+				throw new Error("XML parsing error:" + errors[0].textContent);
+			}
+		} else if(typeof ActiveXObject != "undefined") {
+			xmldom = createDocument();
+			xmldom.loadXML(xml);
+			if(xmldom.parseError != 0) {
+				throw new Error("XML parsing error: " + xmldom.parseError.reason);
+			}
+		} else {
+			throw new Error("No XML parser available.");
+		}
+		return xmldom;
+		}
+
+		//对序列化 XML 而言，也可以按照同样的方式编写一个能够在四大浏览器中运行的函数。例如：
+		function serializeXml(xmldom) {
+			if(typeof XMLSerializer != "undefined") {
+				return(new XMLSerializer()).serializeToString(xmldom);
+			} else if(typeof xmldom.xml != "undefined") {
+				return xmldom.xml;
+			} else {
+				throw new Error("Could not serialize XML DOM.");
+			}
+		}
+	</script>
+
+</html>

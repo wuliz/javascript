@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			//array类型。js的array特点如下
+			//数组中保存变量的类型可以不一致
+			//大小可变，随内容自适应
+			
+			//创建数组类型
+			//1、使用构造函数
+			//var arr=new Array();//使用构造函数，创建一个空数组
+			//创建知道长度的数组类型
+			
+			//var arr1=new Array(20);//创建长度为20的数组
+			
+			//创建带有项的数组
+			//var arr2=new Array("zs","ls",15);
+			
+			//给构造函数传递数值的时候需要注意：如果传递的是数值。则创建相等长度的数组，如果创建的是其他类型，则创建包含该值的一个数组；
+			
+			//var color=new Array(3)//长度为3
+			//var color2=new array("blue")//创建数组；包含blue;
+			
+			//!注意，其他创建数组的方法，new可以省略
+			//var color=Array(3);
+			//var color=Array("blue");
+			
+			//2、使用字面量表示法
+			
+			//var arr=["1","2","3","4","5"];
+			//var arr=[];//创建一个空数组
+			//var arr={"a","b",}//可能会创建两个或三个项的数组，分别是a,b,undefined
+			//var arr=[,,,,,]//可能会创建5到6个项的数组，全是undefined
+			
+			
+			//读取数组
+			
+			//var arr=["a","b","c"];
+			
+			/*console.log(arr[0]);
+			console.log(arr[5]);//undefined
+			console.log(arr[-1]);//undefined
+			
+			arr.length=2;//修改数组的长度后，后面的项将移出，没有的数加变成undefined
+			console.log(arr[2]);//undefinde
+			arr.length=10;
+			console.log(arr.toString());//a,b,,,,,,,,,
+			
+			//lenght也可以很方便的末尾添加新项
+			arr[arr.length]=55;//在末尾添加55
+			console.log(arr.toString());*/
+			
+			
+			//检测数组
+			//1、当一个环境时：变量  instanceof Array;
+			/*
+			var a=new Array();
+			console.log(a instanceof Array);//true
+			*/
+			//2、当两个环境变量时：Array.isArray(变量)；
+			
+			//转换方法
+			/*var arr=["123",12,"abc"];
+			console.log(arr.toString());//123,12,abc:数组的字符串表示
+			console.log(typeof arr.toString());//String
+			
+			console.log(arr.valueOf());//返回的是一个对象
+			*/
+			//小结：array对象都有的方法，toString()返回以逗号连接的字符串,toLocalString返回以逗号连接的字符串,Valueof(),返回数组对象
+			//join(","):将数组的每一项以某一种符号连接成字符串返回
+			
+			/*console.log(arr.join());//默认是以逗号连接
+			console.log(arr.join(""));//去掉逗号
+			console.log(typeof arr.join());//String*/
+			
+			
+			//栈方法，JavaScript数组提供的其他数据结构的方法。
+			/*var arr=new Array();
+			console.log(arr.push("123",12));//加入两个项,返回修改后数组的长度
+			console.log(arr.toString());//123，12
+			console.log(arr.pop());//删除最后一项并返回，并减少数组长度*/
+			
+			
+			//队列方法：队列：先进先出；出在头：shift(),取出第一个元素，并改变数组长度，进在尾；进在尾：arr.push("arr")和栈方法是一致的，;
+			
+			/*var arr=new Array();
+			var n=arr.push("abc",12);
+			console.log(n);//2
+			var obj=arr.shift();
+			console.log(obj);//abc
+			console.log(arr.length);//1*/
+			
+			//unshift:加入项在最前面
+			/*var number=arr.unshift("123","a");//返回新数组的长度
+			console.log(number);//3
+			console.log(arr.toString());//123,a,abc*/
+			
+			//重排序方法
+			//reverse()和sort()：原数组不变，是返回一个新的数组
+			//reverse():将数组反转
+			//sort():将数组排序：是指将数组的每一项转为字符型，然后进行比较:从小到大
+			
+		/*	var arr=[1,2,3,4,56,12,7];
+			var a=arr.sort();
+			console.log(a.toString())//1,12,2,3,4,56,7:不是正确的结果;sort允许传入参数，但参数必须是一个函数
+			
+			function compare(num1,num2){
+				if(num1<num2){
+					return 1;
+				}
+				else if(num1>num2){
+					return -1;
+				}else{
+					return 0;
+				}
+			}
+			
+			a=arr.sort(compare);//传入参数名
+			console.log(a.toString());//56,12,7,4,3,2,1*/
+			
+			//操作方法：对数组进行增删改：
+			//1、concat():连接生成一个新数组，原数组不变
+			
+			/*var arr=['a','b','c'];
+			var arr2=[1,2,3];
+			var newarr=arr.concat(arr2);
+			console.log(newarr);//a，b,c,1,2,3
+			newarr=arr.concat("123",12);
+			console.log(newarr);//a,b,c,1,2,3,123,12
+			console.log(typeof newarr);//返回对象类型
+			console.log(newarr instanceof Array)//数组类型*/
+			
+			//2、slice()方法：切片方法，从某一个点到另外一个点：可以有一个或两个参数（下标到下标但不包括最后的一个下标）[n1,n2)
+			/*var arr=['a','b','c'];
+			var newarr=arr.slice();
+			console.log(newarr);//不加参数是原来的数组
+			newarr=arr.slice(1);
+			console.log(newarr);//b,c
+			newarr=arr.slice(0,1);
+			console.log(newarr);//a:返回类型是数组类型*/
+			
+			//3、万能方法：splice(操作位置，要删除项的数量，要添加项);可以接收三个参数：在原数组操作：返回删除的项的数组
+			/*var arr=['a','b','c'];
+			var newarr=arr.splice(0,1);//删除下标为零的项
+			console.log(newarr);//[a]
+			console.log(arr);//[b,c]
+			
+			newarr=arr.splice(0,0,"d","e");//在0下标的位置插入d和e
+			console.log(newarr);//[]
+			console.log(arr);//[d,e,b,c]
+			
+			newarr=arr.splice(2,2,'a','b');//替换b和c
+			console.log(newarr);//[b,c]
+			console.log(arr);//[d,e,a,b]*/
+			
+			
+			//位置方法：indexof()和lastIndexOf():接收两个参数：要查找的项以及开始查找的位置；返回查找项的位置，没找到返回-1，一个从前面往后，一个从后面往前
+			/*var number=[1,2,3,5,6,9,8,7];
+			var n=number.indexOf(5,0);
+			var n1=number.lastIndexOf(5,6);
+			console.log(n);//3
+			console.log(n1);//3*/
+			
+			//迭代方法
+			//1、erery():每一个数组项都要满足条件才为true；
+			//2、some();有一个数组项满足条件就为true
+			
+			/*var numbers = [1,2,3,4,5,4,3,2,1]; 
+			//函数作为参数时：当调用了主函数时，该被调用函数也会执行
+			//number的每一个项是不是都大于2
+			var ereryRes=numbers.every(function(item,index,array){
+				if(item<2)
+				return false;
+			});
+			console.log(ereryRes);
+			//
+			var someRes=numbers.some(function(item,index,array){
+				if(item==5){
+					return true;
+				}
+			})
+			console.log(someRes);
+			
+			//数组的每一项执行的操作
+			numbers.forEach(function(item,index,array){
+				console.log(item*2);
+			})*/
+			
+			//归并方法：reduce()和reduceRight();reduce是从前往后，reduceRight从后往前
+			var numbers = [1,2,3,4,5,4,3,2,1]; 
+			//求和
+			var sum=numbers.reduce(function(pre,current,index,array){
+				//处理pre和current,接着指向下一个
+				return pre+current;
+			})
+			console.log(sum);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

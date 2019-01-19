@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			//函数的本质是一个对象，也具有属性和方法
+			//函数名实际上是指向函数对象的一个指针
+
+			//函数的定义
+			//第一种：函数声明
+			/*function sum(num1,num2){
+				return num1+num2;
+			}*/
+			//第二种：函数表达式，第一种函数会立即初始化，第二种表达式要运行到此处才会初始化
+			/*var sum=function(num1,num2){
+				return num1+num2;
+			};*/
+
+			//var sum=new Function("num1","num2","return num1+num2");//不推荐，构造函数是前面函数名，后面函数体
+
+			//一个函数可以有多个函数名：一个对象可以有多个指针
+			/*function test(){
+				console.log("i am test");
+			}
+			var p=test;
+			var q=test;
+			p();//i am test
+			q();//i am test
+			*/
+
+			//没有重载的概念
+			//就像js中是没有参数这一概念
+
+			/*function sum(num,num1){
+				console.log(num1+num2);
+			}
+			function sum(num){
+				console.log(num);
+			}
+			sum(10,20);//只会调用后面的函数，后面的函数会覆盖前面的函数*/
+
+			//作为值的函数，因为函数的本身是变量
+			//也就是说既可以将函数作为参数传递，也可以作为值返回
+			//函数作为参数：
+
+			/*function call(somefunction, someargument) { //将函数作为参数，后面是函数的参数,通用函数
+				return somefunction(someargument);
+			}
+
+			function add(num) {
+				return num + 10;
+			}
+
+			function greet(name) {
+				return "hello" + name;
+			}
+			var a = call(add, 20);
+			console.log(a); //30
+			a = call(greet, "wlz");
+			console.log(a); //hellowlz*/
+
+			//从一个函数中返回另一个函数
+
+			/*function createComparisonFunction(propertyName) {
+				return function(object1, object2) {
+					var value1 = object1[propertyName];
+					var value2 = object2[propertyName];
+					if(value1 < value2) {
+						return -1;
+					} else if(value1 > value2) {
+						return 1;
+					} else {
+						return 0;
+					}
+				};
+			}
+			var data = [{
+				name: "Zachary",
+				age: 28
+			}, {
+				name: "Nicholas",
+				age: 29
+			}];*/
+			/*data.sort(createComparisonFunction("name"));
+			console.log(data[0].name); //Nicholas 
+			data.sort(createComparisonFunction("age"));
+			console.log(data[0].name); //Zachary*/
+
+			/*data.sort(function(object1, object2) {
+				var value1 = object1.name;
+				var value2 = object2.name;
+				if(value1 < value2) {
+					return -1;
+				} else if(value1 > value2) {
+					return 1;
+				} else {
+					return 0;
+				}
+			})
+			console.log(data[0].name); //Nicholas 
+
+			data.sort(function(object1, object2) {
+				var value1 = object1.age;
+				var value2 = object2.age;
+				if(value1 < value2) {
+					return -1;
+				} else if(value1 > value2) {
+					return 1;
+				} else {
+					return 0;
+				}
+			})
+			console.log(data[0].name); //Zachary
+*/
+			//函数内部属性
+			//argument:(类数组对象，包含着传入函数中的所有参数)。和this对象(引用的是函数据以执行的环境对象——或者也可以说是 this 值（当在网页的全局作用域中调用函数时，this 对象引用的就是 window）。来看下面的例子。)
+			//argument有一个属性叫callee:该属性是一个指针，指向拥有这个 arguments 对象的函数。
+			//示例：
+			/*function factorial(num) {
+				if(num <= 1) {
+					return 1;
+				} else {
+					return num * arguments.callee(num - 1)
+				}
+			}
+			*/
+			//this:
+			/*window.color="red";
+			function sayColor(){
+				console.log(this.color);
+			}
+			var o={color:"blue"};
+			sayColor();//red:相当于window.sayColor();所以环境对象对window
+			o.sayColor=sayColor;//给对象添加一个 属性；属性值为sayColor函数名，即该函数地址；
+			o.sayColor();//blue:环境对象为o
+			*/
+			//函数属性和方法：length和prototype
+			//函数的length指的是函数的个数
+
+			//基本包装类型：Boolean Number String；都有tostring(),toLocalString(),valusOf():返回引用类型对应的基本类型
+			//Boolean对应基本类型的引用类型
+			//
+			var booleanObj = new Boolean(false); //创建一个值为false的对象
+			console.log(booleanObj && true); //返回true；原因是不是和booleanObj的值做比较，而是由于所以不为null的object都为true
+			var booleanvalue = false;
+			console.log(booleanvalue && true); //false
+
+			//Number类型：数字对应的引用类型
+
+			var numObj = new Number(9999); //创建了一个值为10的number引用类型对象
+			console.log(numObj.toString()); //9999
+			console.log(numObj.toString(2)); //将对象以二进制返回：110011100001111
+
+			//toFix()；返回数值的小数点表示
+			console.log(numObj.toFixed(2)); //9999.00四舍五入
+			//toExponential(1):返回用指数形式表示的该数字
+			console.log(numObj.toExponential(1)); //1.0e+4
+			console.log(numObj.toExponential(2)); //1.00e+4
+			console.log(numObj.toExponential(3)); //9.999e+3
+			console.log(numObj.toExponential(4)); //9.9990e+3
+
+			//String对象：string类型对应的引用类型
+			//创建一个string对象
+			var stringObj = new String("ahdakgk");
+			//length属性
+			console.log(stringObj.length); //11
+			//字符方法：
+			//charAt(参数)：取第几个字符
+			//charCodeAt(参数)：取第几个字符的编码
+			//还可以用  变量名[位置]来访问；js5版本
+			console.log(stringObj.charAt(0)); //a
+			console.log(stringObj.charCodeAt(0)); //97
+			console.log(stringObj[0]) //a
+
+			//字符串操作方法：
+			//连接方法：concat();
+			//slice();两个参数：起始和终点
+			//substr();两个参数：起始和个数
+			//substring();两个参数：起始和终点
+			var stringValue = "hello ";
+			var result = stringValue.concat("world", "!");
+			console.log(result); //"hello world!" 
+			console.log(stringValue); //"hello"
+
+			var stringValue = "hello world";
+			console.log(stringValue.slice(3)); //"lo world" 
+			console.log(stringValue.substring(3)); //"lo world" 
+			console.log(stringValue.substr(3)); //"lo world" 
+			console.log(stringValue.slice(3));
+			/*在传递给这些方法的参数是负值的情况下，它们的行为就不尽相同了。其中，slice()方法会将传
+			入的负值与字符串的长度相加，substr()方法将负的第一个参数加上字符串的长度，而将负的第二个
+			参数转换为 0。最后，substring()方法会把所有负值参数都转换为 0。*/
+			var stringValue = "hello world";
+			console.log(stringValue.slice(-3)); //"rld" 
+			console.log(stringValue.substring(-3)); //"hello world" 
+			console.log(stringValue.substr(-3)); //"rld" 
+			console.log(stringValue.slice(3, -4));
+
+			//字符串的位置方法：
+			//indexof():indexOf()方法从字符串的开头向后搜索子字符串;一个参数表示需要检索的字符，两个参数表示从哪个位置开始检索
+			//如果字符出现不止一次：取最后出现这个字符的位置
+			//而 lastIndexOf()方法是从字符串的末尾向前搜索子字符串
+
+			var stringValue = "hello world";
+			console.log(stringValue.indexOf("o")); //4 
+			console.log(stringValue.lastIndexOf("o"));
+
+			var stringValue = "hello world";
+			console.log(stringValue.indexOf("o", 6)); //7 
+			console.log(stringValue.lastIndexOf("o", 6)); //
+
+			//trim():删除字符串的所以前缀和后缀的空格
+
+			var stringValue = " hello world ";
+			var trimmedStringValue = stringValue.trim();
+			console.log(stringValue); //" hello world " 
+			console.log(trimmedStringValue); //"hello world"
+
+			//转换大小写方法：toLowerCase()、toLocaleLowerCase()、toUpperCase()和 toLocaleUpperCase()。
+			var stringValue = "hello world";
+			console.log(stringValue.toLocaleUpperCase()); //"HELLO WORLD" 
+			console.log(stringValue.toUpperCase()); //"HELLO WORLD" 
+			console.log(stringValue.toLocaleLowerCase()); //"hello world
+
+			//字符串模式匹配方法
+			//match():只接受一个参数，要么是一个正则表达式，要么是一个 RegExp 对象
+			var text = "cat, bat, sat, fat";
+			var pattern = /.at/;
+			//与 pattern.exec(text)相同
+			var matches = text.match(pattern);
+			console.log(matches.index); //0 
+			console.log(matches[0]); //"cat" 
+			console.log(pattern.lastIndex); //0
+			//serach()
+			/*参数相同：由字
+			符串或 RegExp 对象指定的一个正则表达式。search()方法返回字符串中第一个匹配项的索引；如果没
+			有找到匹配项，则返回-1。而且，search()方法始终是从字符串开头向后查找模式*/
+
+			var text = "cat, bat, sat, fat";
+			var pos = text.search(/at/);
+			console.log(pos); //1
+
+			/*eplace()方法。这个方法接受两个参数：第
+			一个参数可以是一个 RegExp 对象或者一个字符串（这个字符串不会被转换成正则表达式），第二个参
+			数可以是一个字符串或者一个函数。如果第一个参数是字符串，那么只会替换第一个子字符串。要想替
+			换所有子字符串，唯一的办法就是提供一个正则表达式，而且要指定全局（g）标志*/
+
+			var text = "cat, bat, sat, fat";
+			var result = text.replace("at", "ond");
+			console.log(result); //"cond, bat, sat, fat" 
+			result = text.replace(/at/g, "ond");
+			console.log(result); //"cond, bond, sond, fond"
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

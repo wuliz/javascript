@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script type="text/javascript">
+		//XMLRequest2
+
+		//XMLRequest1虽然可以向服务器发送异步请求
+		//缺点：需要模拟表单提交，设置请求头，序列化表单
+
+		//FormData类型：为序列化表单以及创建与表单格式相同的数据（用于通过 XHR 传输）提供了便利。
+
+		var data = new FormData();
+		data.append("name", "Nicholas");
+		//。而通过向 FormData 构造函数中传入表单元素，也可以用表单元素的数据预先向其中填入键值对儿：
+		var data = new FormData(document.forms[0]);
+
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4) {
+				if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+					alert(xhr.responseText);
+				} else {
+					alert("Request was unsuccessful: " + xhr.status);
+				}
+			}
+		}
+		xhr.open("post", "postexample.php", true);
+		var form = document.getElementById("user-info");
+		xhr.send(new FormData(form));
+		/*使用 FormData 的方便之处体现在不必明确地在 XHR 对象上设置请求头部。XHR 对象能够识别传
+		入的数据类型是 FormData 的实例，并配置适当的头部信息*/
+
+		//超时设定：timeout
+
+		xhr.open("get", "timeout.php", true);
+		xhr.timeout = 1000; //将超时设置为 1 秒钟（仅适用于 IE8+）
+		xhr.ontimeout = function() {
+			alert("Request did not return in a second.");
+		};
+		xhr.send(null);
+		
+		//3\overrideMimeType()方法：用于重写 XHR 响应的 MIME 类型
+		xhr.overrideMimeType("text/xml"); 
+	</script>
+
+</html>

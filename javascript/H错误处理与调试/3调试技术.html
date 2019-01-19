@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<p>The following code should cause an Operation Aborted error in IE versions prior to 8.</p>
+		<div>
+			<script type="text/javascript">
+				document.body.appendChild(document.createElement("div"));
+			</script>
+		</div>
+	</body>
+	<script>
+		//开发人员需要调式自己的代码，早期没有调试程序的时候，使用alert():但这个缺点就是，调试完需要清理
+		//如今有更好的方式
+
+		//1、将消息记录在控制台
+		//console对象
+
+		console.log(console.constructor.name); //Console"
+
+		//console对象的方法：
+		//error(message);将错误消息记录在控制台
+		//info(message);将信息性消息记录在控制台
+		//log(message);将一般消息记录在控制台
+		//warn(message);将警告消息记录在控制台
+
+		//2、将消息记录到当前页面
+		/*var console = document.getElementById("debuginfo");
+		if(console === null) {
+			console = document.createElement("div");
+			console.id = "debuginfo";
+			console.style.background = "#dedede";
+			console.style.border = "1px solid silver";
+			console.style.padding = "5px";
+			console.style.width = "400px";
+			console.style.position = "absolute";
+			console.style.right = "0px";
+			console.style.top = "0px";
+			document.body.appendChild(console);
+		}
+		console.innerHTML += "<p>" + message + "</p>";
+		}*/
+		//3、抛出错误
+
+		//常見的IE8错误
+		//1、在document未加载完全时修改document.body
+		//2、无效字符
+		//3、未找到成员
+		document.onclick = function() {
+			var event = window.event;
+			setTimeout(function() {
+				event.returnValue = false; //未找到成员错误
+				
+			}, 1000);
+		};
+		//4、未知运行时错误
+		//span.innerHTML = "<div>Hi</div>"; 
+		//5、系统无法找到指定资源：在使用 JavaScript 请求某个资源 URL，而该 URL 的长度超过了 IE 对 URL最长不能超过 2083 个字符的限制时，就会发生这个错误
+	</script>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+		<script>
+			//创建引用类型的两种方式
+			
+			//1.new object()与var obj={}等同
+			/*var obj = new Object();
+			//或
+			//var obj={};
+			obj.name = "wlz";
+			obj.age = 17;
+			obj.eat = function() {
+				console.log("我要吃饭啦！");
+			}*/
+
+			//2、对象字面法表示
+			/*var obj2 = {
+					name: "zs",
+					age: 17,
+					eat: function() {
+						console.log("我要吃面！");
+					}
+				}*/
+				//属性名可以加引号也可以不加
+			/*var obj2 = {
+				"name": "zs",
+				"age": 17,
+				“eat ":function(){
+				console.log("我要吃面！");
+			}
+			}*/
+			/*console.log(obj.name);
+			obj.eat()
+			console.log(obj2.name);
+			obj2.eat()*/
+			
+			//字面量创建引用类型更受青睐
+			function  display(arg){
+				var con="";
+				if(typeof arg.name=="string"){//检验\一个属性是否存在
+					con+="name"+arg.name+"\n";
+				}
+				//访问对象属性：obj.name或则obj["name"]
+				if(typeof arg.age=="number"){
+					con+="age"+arg.age+"\n";
+				}
+				return con;
+			}
+			//console.log(typeof z);//undefined
+			var obj={name:"wlz",age:17};
+			console.log(obj["name"]);//另一种取属性值表示法
+			console.log(display(obj));
+			console.log(display({"name":"zs"}));
+			
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

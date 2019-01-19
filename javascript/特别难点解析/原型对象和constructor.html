@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			//我们每创建的一个函数都可以当作构造函数使用
+			//只要是用new 构造函数名（）创建
+
+			//每一个函数都有：argument属性，caller属性，length属性，name属性，prototype属性（指向原型对象）
+			//构造函数名.prototype对象包含该特定类型的所有实例共享的方法和属性以及constructor
+			//constructor又重新指向函数，
+			//除此 之外：其他方法由继承所得
+
+			/*
+			 * 。当调用构造函数创建一个新实例后，该实例的内部将包含一个指针（内部
+属性），指向构造函数的原型对象。ECMA-262 第 5 版中管这个指针叫[[Prototype]]。虽然在脚本中
+没有标准的方式访问[[Prototype]]，但 Firefox、Safari 和 Chrome 在每个对象上都支持一个属性
+__proto__；而在其他实现中，这个属性对脚本则是完全不可见的。不过，要明确的真正重要的一点就
+是，这个连接存在于实例与构造函数的原型对象之间，而不是存在于实例与构造函数之间
+			 */
+
+			//如何确定实例与函数原型存在某种关系
+			//Object.getPrototypeOf(实例)//得到原型对象
+
+			/*每当代码读取某个对象的某个属性时，都会执行一次搜索，目标是具有给定名字的属性。搜索首先
+从对象实例本身开始。如果在实例中找到了具有给定名字的属性，则返回该属性的值；如果没有找到，
+则继续搜索指针指向的原型对象，在原型对象中查找具有给定名字的属性。如果在原型对象中找到了这
+个属性，则返回该属性的值。*/
+
+			//虽然可以通过对象实例访问保存在原型中的值，但却不能通过对象实例重写原型中的值
+			/*如果我们
+			在实例中添加了一个属性，而该属性与实例原型中的一个属性同名，那我们就在实例中创建该属性，该
+			属性将会屏蔽原型中的那个属性。来看下面的例子*/
+			/*function Person() {}
+			Person.prototype.name = "Nicholas";
+			Person.prototype.age = 29;
+			Person.prototype.job = "Software Engineer";
+			Person.prototype.sayName = function() {
+				console.log(this.name);
+			};
+			var person1 = new Person();
+			var person2 = new Person();
+			person1.name = "Greg";
+			console.log(person1.name); //"Greg"——来自实例
+			console.log(person2.name); //"Nicholas"——来自原型
+*/
+			//添加这个属性只会阻止我们访问原型中的那个属性，但不会修改那个属性
+
+			/*function Person() {}
+			Person.prototype.name = "Nicholas";
+			Person.prototype.age = 29;
+			Person.prototype.job = "Software Engineer";
+			Person.prototype.sayName = function() {
+				console.log(this.name);
+			};
+			var person1 = new Person();
+			var person2 = new Person();
+			person1.name = "Greg";
+			console.log(person1.name); //"Greg"——来自实例
+			console.log(person2.name); //"Nicholas"——来自原型
+			delete person1.name;
+			console.log(person1.name); //"Nicholas"——来自原型*/
+
+			//判断属性是存在与实例中的：对象.hasOwnPpreroty("属性名")；
+			/*function Person() {}
+			Person.prototype.name = "Nicholas";
+			Person.prototype.age = 29;
+			Person.prototype.job = "Software Engineer";
+			Person.prototype.sayName = function() {
+				console.log(this.name);
+			};
+			var person1 = new Person();
+			var person2 = new Person();
+			console.log(person1.hasOwnProperty("name")); //false 
+			person1.name = "Greg";
+			console.log(person1.name); //"Greg"——来自实例
+			console.log(person1.hasOwnProperty("name")); //true 
+			console.log(person2.name); //"Nicholas"——来自原型
+			console.log(person2.hasOwnProperty("name")); //false 
+			delete person1.name;
+			console.log(person1.name); //"Nicholas"——来自原型
+			console.log(person1.hasOwnProperty("name")); //false*/
+
+			//一般情况下：每一个创建的函数都有默认的原型函数，原型函数中有constructor对象，原型属性和方法，以及继承过来的属性和方法
+			//但我们可以自己定义原型对象。
+			/*function Person() {}
+			Person.prototype = {
+				name: "Nicholas",
+				age: 29,
+				job: "Software Engineer",
+				sayName: function() {
+					console.log(this.name);
+				}
+			};*/
+			//但该方法有一个弊端，constructor不再指向Person
+			/*var friend = new Person();
+			console.log(friend instanceof Object); //true 
+			console.log(friend instanceof Person); //true 
+			console.log(friend.constructor == Person); //false 
+			console.log(friend.constructor == Object); //true
+
+			//如果constructor的值很重要，可以使用下列方式
+			function Person() {}
+			Person.prototype = {
+				constructor: Person,
+				name: "Nicholas",
+				age: 29,
+				job: "Software Engineer",
+				sayName: function() {
+					console.log(this.name);
+				}
+			};
+
+			//注意，以这种方式重设 constructor 属性会导致它的[[Enumerable]]特性被设置为 true。默认情况下，原生的 constructor 属性是不可枚举的，
+			//可以修改constructor的[[enumerable]]特性
+			//重设构造函数，只适用于 ECMAScript 5 兼容的浏览器
+			Object.defineProperty(Person.prototype, "constructor", {
+				enumerable: false,
+				value: Person
+			});*/
+
+			//原型對象的问题：包含引用类型的属性时产生的问题
+			/*function Person() {}
+			Person.prototype = {
+				constructor: Person,
+				name: "Nicholas",
+				age: 29,
+				job: "Software Engineer",
+				friends: ["Shelby", "Court"],
+				sayName: function() {
+					console.log(this.name);
+				}
+			};
+			var person1 = new Person();
+			var person2 = new Person();
+			person1.friends.push("Van");
+			console.log(person1.friends); //"Shelby,Court,Van" 
+			console.log(person2.friends); //"Shelby,Court,Van" 
+			console.log(person1.friends === person2.friends); //true*/
+
+			//怎么解决上述问题：结合构造函数模式和原型模式使用
+			//创建自定义类型的最常见方式，就是组合使用构造函数模式与原型模式。构造函数模式用于定义实例属性，而原型模式用于定义方法和共享的属性。
+			function Person(name, age, job) {
+				this.name = name;
+				this.age = age;
+				this.job = job;
+				this.friends = ["Shelby", "Court"];
+			}
+			Person.prototype = {
+				constructor: Person,
+				sayName: function() {
+					console.log(this.name);
+				}
+			}
+			var person1 = new Person("Nicholas", 29, "Software Engineer");
+			var person2 = new Person("Greg", 27, "Doctor");
+			person1.friends.push("Van");
+			console.log(person1.friends); //"Shelby,Count,Van" 
+			console.log(person2.friends); //"Shelby,Count" 
+			console.log(person1.friends === person2.friends); //false 
+			console.log(person1.sayName === person2.sayName); //true
+
+			//但上述方法有一个问题：将一个构造函数分成了两部分来写，如何封装在构造函数内
+			/*function Person(name, age, job) {
+				//属性
+				this.name = name;
+				this.age = age;
+				this.job = job;
+				//方法
+				if(typeof this.sayName != "function") {
+
+					Person.prototype.sayName = function() {
+						console.log(this.name);
+					};
+
+				}
+			}
+			var friend = new Person("Nicholas", 29, "Software Engineer");
+			friend.sayName();//Nicholas*/
+			
+		</script>
+	</head>
+
+	<body>
+		
+		<frameset cols="25%,50%,25%">
+
+  <frame src="http://baidu.com">
+  <frame src="http://baidu.com">
+  <frame src="http://baidu.com">
+
+</frameset>
+		<frame src="http://baidu.com" />
+	</body>
+
+</html>

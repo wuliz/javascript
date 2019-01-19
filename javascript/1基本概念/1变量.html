@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+		<script>
+			//一种类型赋给另外一种类型是适用的，但不推荐使用
+			/*var a="abc";
+			a=10;
+			alert(a);*/
+
+			//定义a，没有初始化，默认undefined
+			/*	var a; */
+
+			/*//调用函数时，局部变量创建，函数执行结束时，局部变量销毁
+			function test() {
+				 //定义的是局部变量
+				var a = "abc";
+			}
+			test();
+			alert(a); //会报错 表明a是没有定义的*/
+			
+			function test(){
+				a="abc";
+			}
+			test();//调用函数，创建全局变量a.
+			console.log(a);
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

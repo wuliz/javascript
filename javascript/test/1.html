@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<button> 发送消息</button>
+		<iframe src="http://127.0.0.1:8020/javascript/test/2.html" width="400" height="400" id="myif"></iframe>
+	</body>
+	<script>
+	//获取iframe的window对像
+		var ifameWindow =document.getElementById("myif").contentWindow;
+		var btn=document.querySelector("button");
+		btn.onclick=function(){
+			//向内框架发送消息
+				ifameWindow.postMessage("向2发送消息","http://127.0.0.1:8020/javascript/test/2.html");
+		}
+		window.onmessage=function(event){
+			console.log(event.data);
+		}
+	</script>
+</html>

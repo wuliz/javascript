@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			//"use strict"//严格模式
+			//定义一个函数
+			
+			function sayhi(arg0,arg1){
+				console.log(arg0+arg1);
+			}
+			
+			//调用函数
+			/*sayhi("hello","wlz");
+			sayhi();
+			//定义一个带返回值的函数
+			function num(num1,num2){
+				return num1+num2;
+			}
+			var a=num(1,2);
+			console.log(a);
+			
+			//带return 不带值
+			
+			function nu(){
+				return;//会自动返回undefined;后面的语句不再执行
+				
+			}
+			
+			console.log(nu());//undefined
+			
+			//严格模式参数名不能是arguments或eval,参数不能同名
+			
+			function test(arguments){
+				console.log(arguments);
+			}
+			test("hello");*/
+			
+			
+			//理解參數
+		/*ECMAScript 函数的参数与大多数其他语言中函数的参数有所不同。ECMAScript 函数不介意传递进
+来多少个参数，也不在乎传进来参数是什么数据类型。也就是说，即便你定义的函数只接收两个参数，
+在调用这个函数时也未必一定要传递两个参数。可以传递一个、三个甚至不传递参数，而解析器永远不
+会有什么怨言。之所以会这样，原因是 ECMAScript 中的参数在内部*/
+
+			//JavaScript内部的參數是用一個數組存放的；用一个argument对象来指向。不在乎你传入几个参数
+			
+			/*function test(){
+				consol.log(arguments[0]);
+				console.log(arguments.length);
+			}
+			test(1,2,1);
+			test();//报错，提示argument没有声明。*/
+			
+			function test(num1,num2){
+				arguments[1]=num2+num1;//修改了arguments相当修改了num
+				console.log(arguments[0]+arguments[1]);
+				console.log(num1+num2);
+			}
+			console.log(test(1,2));
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

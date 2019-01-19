@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script type="text/javascript">
+		/*
+											E4X(ECMAScript for XML)（E4X是ECMAScript的扩展）
+											2002年由 BEA Systems 为首的几家公司建议为 ECMAScript 增加一项扩展，以便在这门语言
+								中添加原生的 XML 支持。2004 年 6 月，E4X（ECMAScript for XML）以 ECMA-357 标准的形
+								式发布；2005 年 12 月又发布了修订版。E4X 本身不是一门语言，它只是 ECMAScript 语言的可选扩展。
+								就其本身而言，E4X 为处理 XML 定义了新的语法，也定义了特定于 XML 的对象
+										 */
+		/*
+		 * E4X 的类型
+作为对 ECMAScript 的扩展，E4X 定义了如下几个新的全局类型。
+ XML：XML 结构中的任何一个独立的部分。
+ XMLList：XML 对象的集合。
+ Namespace：命名空间前缀与命名空间 URI 之间的映射。
+ QName：由内部名称和命名空间 URI 组成的一个限定名
+		 */
+
+		//XML类型
+		var x = new XML();
+		//这行代码会创建一个空的 XML 对象，我们能够向其中添加数据。另外，也可以向构造函数中传入一个 XML 字符串，
+		var x = new XML("<employee position=\"Software Engineer\"><name>Nicholas " +
+			"Zakas</name></employee>");
+		//传入到构造函数中的 XML 字符串会被解析为分层的 XML 对象。除此之外，还可以向构造函数中传入 DOM 文档或节点，以便它们的数据可以通过 E4X 来表现，语法如下：
+
+		var x = new XML(xmldom);
+
+		//XML字面量
+		/*var employee = < employee position = "Software Engineer" >
+			<
+			name > Nicholas C.Zakas < /name>  <
+			/employee>; */
+		//console.log(employee);
+
+		//XMLList类型
+		var list = new XMLList();
+		var list = new XMLList("<item/><item/>");
+		//var list = <item/> + <item/> ; 
+		//var list = <><item/><item/></>; 
+
+		//Namespace类型
+		/*
+		 * E4X 中使用 Namespace 对象来表现命名空间。通常，Namespace 对象是用来映射命名空间前缀和
+命名空间 URI 的，不过有时候并不需要前缀。要创建 Namespace 对象，可以像下面这样使用 Namespace
+构造函数：
+		 */
+
+		var ns = new Namespace();
+		var ns = new Namespace("http://www.wrox.com/"); //没有前缀的命名空间
+		var wrox = new Namespace("wrox", "http://www.wrox.com/"); //wrox 命名空间
+		//可以使用 prefix 和 uri 属性来取得 Namespace 对象中的信息：
+		alert(ns.uri); //"http://www.wrox.com/" 
+		alert(ns.prefix); //undefined 
+		alert(wrox.uri); //"http://www.wrox.com/" 
+		alert(wrox.prefix); //"wrox"
+		
+		//19.1.4 QName类型
+	</script>
+
+</html>

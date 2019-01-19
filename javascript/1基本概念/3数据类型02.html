@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+		<script>
+			//undefind类型:未初始化，默认undefined,变量未声明会出错
+
+			/*var a;//未初始化，默认undefined
+			
+			alert(a==undefined);//true;undefinde==undefinde;
+			
+			alert(a);//undefined
+			alert(b)//出错；因为b没有声明
+			
+			
+			typeof a;//undefined
+			typeof b//undefined
+			//null类型：表示内存有一个指针，却没有指向任何一个对象。
+			alert(typeof null);//object
+			alert(null==undefined)//true,undefind是派生自null值的
+			*/
+
+			//Boolean 类型
+
+			//转型函数Boolean（）;
+
+			//String类型
+			/* var mes="hello";
+			 console.log(Boolean(mes));//true;
+			 var mes="";
+			 console.log(Boolean(mes));//false;*/
+
+			//Number类型
+			/* var num=12;
+			 console.log(Boolean(num));//true 任意数字包括无穷大
+			 var num=0;
+			 console.log(Boolean(num));//false
+			 var num=NaN;
+			 console.log(Boolean(num));//false*/
+
+			/* //object类型
+			 var obj={a:"hello"};
+			 console.log(typeof obj);//object类型
+			 console.log(Boolean(obj));//true
+			 var obj=null;
+			 console.log(Boolean(obj));//false类型*/
+
+			//undefined
+			//console.log(Boolean(undefined)); //false;
+
+			//Number
+
+			/*//整型
+			var a=1;
+			var a=070;//八进制整数
+			var b=0XA;//16进制整数
+			console.log(a);
+			console.log(b);
+			
+			//浮点数:该数值必须含有小数点，且小数点后有数字
+			var a=1.0//输出1
+			var b=1.5;//输出1.5
+			var c=.5;//输出0.5
+			console.log(a);
+			console.log(b);
+			console.log(c);*/
+
+			/*//NAN：不是一个数字:
+			//isNaN():判断一个数不是数字：是数字的有：Number，true，全由数字组成的字符：)函数。这个函数接受一个参数，该参数可以
+是任何类型，而函数会帮我们确定这个参数是否“不是数值”。isNaN()在接收到一个值之后，会尝试
+将这个值转换为数值。某些不是数值的值会直接转换为数值
+			console.log(isNaN("abc"));//true:不是数字
+			console.log(isNaN("10"));//false：是数字
+			console.log(isNaN("1.5a"));//true//
+			console.log(isNaN(NaN));//true
+			console.log(isNaN(true));//false*/
+
+			//数值转换：NUmber（）;parseInt();parseFloat()
+			//Numebr()
+			/*console.log(Number(true)); //1
+			console.log(Number(1)); //1
+			console.log(Number(1.11)); //1.11
+			console.log(Number(00011)); //9:转为8进制
+			console.log(Number(011)); //9
+
+			console.log(Number(0x11)); //17：十六进制转十进制
+			console.log(Number("00123")); //123：忽略前面的零
+			console.log(Number("12ab")); //NaN：不是数字型
+			console.log(Number("")); //零
+			console.log(Number(undefined)); //NaN
+			console.log(Number(null)); //零*/
+
+			//ParseInt()：数。parseInt()函数在转换字符串时，更多的是看其是否符合数值模式。它会忽略字符串前面的空格，直至找到第一个非空格字符。如果第一个字符不是数字字符或者负号，parseInt()就会返回 NaN；
+
+			/*console.log(parseInt(true));//Nan
+			console.log(parseInt("123Abc"));//123
+			console.log(parseInt("1."));//1
+			console.log(parseInt("1.1"));//1
+			console.log(parseInt("10011"));//1011
+			console.log(parseInt("0xA"));//10
+			console.log(parseInt(""));//nan
+			console.log(parseInt(null));//nan
+			console.log(parseInt(undefined));//nan
+			
+			//patseFloat:与上面的区别是：只处理十进制的数
+			
+			console.log(parseFloat("ab"));//nan*/
+			
+			
+			/*//String类型：不可变字符串
+			//转换为字符串
+			//toString();基本所有类型都有toString（）方法，除undefined和null
+			//String();
+			var a=11;
+			console.log(typeof a.toString());//String*/
+			
+			//object类型：对象是一组数据和功能的集合
+			
+			String(null);
+			
+			var obj=new Object();
+			console.log(obj.constructor);//object
+			console.log(obj.prototype);//undefinde
+			console.log(obj.hasOwnProperty());//false
+			console.log(obj.toLocaleString());//object
+			console.log(obj.toString());//Object
+			
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

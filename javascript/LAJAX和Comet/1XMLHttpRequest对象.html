@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script>
+		//AJAX的介绍
+		//2005年，Jesse James Garrett 发表了一篇在线文章，题为“Ajax: A new Approach to WebApplications”
+		//AJAX（Asynchronous JavaScript + XML ）这一技术能够向服务器请求额外的数据而无须卸载页面，会带来更好的用户体验
+		/*
+		 * Ajax 技术的核心是 XMLHttpRequest 对象（简称 XHR），这是由微软首先引入的一个特性，其他
+浏览器提供商后来都提供了相同的实现。在 XHR 出现之前，Ajax 式的通信必须借助一些 hack 手段来实
+现，大多数是使用隐藏的框架或内嵌框架。可以使用 XHR 对象取得新数据，然后再通过 DOM 将新数据插入到页面中。另外，虽然名
+字中包含 XML 的成分，但 Ajax 通信与数据格式无关；这种技术就是无须刷新页面即可从服务器取得数
+据，但不一定是 XML 数据
+		 */
+		/*
+		 * 而且早在 1998 年就有人采用不同的手段实现了这种浏览器
+与服务器的通信。再往前推，JavaScript 需要通过 Java applet 或 Flash 电影等中间层向服务器发送请求。
+而 XHR 则将浏览器原生的通信能力提供给了开发人员，简化了实现同样操作的任务
+		 */
+		//XMLHttpRquest对象
+		//IE5 是第一款引入 XHR 对象的浏览器。（IE的XHR时用ActiveX对象实现的），如下
+		//适用于 IE7 之前的版本
+		function createXHR() {
+			if(typeof arguments.callee.activeXString != "string") {
+				var versions = ["MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+						"MSXML2.XMLHttp"
+					],
+					i, len;
+				for(i = 0, len = versions.length; i < len; i++) {
+					try {
+						new ActiveXObject(versions[i]);
+						arguments.callee.activeXString = versions[i];
+						break;
+					} catch(ex) {
+						//跳过
+					}
+				}
+			}
+			return new ActiveXObject(arguments.callee.activeXString);
+		}
+		//这个函数会尽力根据 IE 中可用的 MSXML 库的情况创建最新版本的 XHR 对象
+
+		//IE7+、Firefox、Opera、Chrome 和 Safari 都支持原生的 XHR 对象，在这些浏览器中创建 XHR 对象要像下面这样使用 XMLHttpRequest 构造函数。
+		var xhr = new XMLHttpRequest();
+		//以下函数兼容IE7和其他版本的浏览器
+		function createXHR() {
+			if(typeof XMLHttpRequest != "undefined") {
+				return new XMLHttpRequest();
+			} else if(typeof ActiveXObject != "undefined") {
+				if(typeof arguments.callee.activeXString != "string") {
+					var versions = ["MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+							"MSXML2.XMLHttp"
+						],
+						i, len;
+					for(i = 0, len = versions.length; i < len; i++) {
+						try {
+							new ActiveXObject(versions[i]);
+							arguments.callee.activeXString = versions[i];
+							break;
+						} catch(ex) {
+							//跳过
+						}
+					}
+				}
+				return new ActiveXObject(arguments.callee.activeXString);
+			} else {
+				throw new Error("No XHR object available.");
+			}
+		}
+
+		//XHR的用法
+		//1、发送同步请求
+		//方法：open(method: String, uri: URIString, async: Boolean, user: String, password: String): void
+		xhr.open("GET", "../test/1.html", false)
+			//调用 open()方法并不会真正发送请求，而只是启动一个请求以备发送。
+		xhr.send("i am xhrRequest data");
+		//发送请求，这次请求是同步的，JavaScript 代码会等到服务器响应之后再继续执行。在收到响应后，响应
+		//的数据会自动填充 XHR 对象的属性，相关的属性简介如下。
+		/*responseText：作为响应主体被返回的文本。
+ responseXML：如果响应的内容类型是"text/xml"或"application/xml"，这个属性中将保
+存包含着响应数据的 XML DOM 文档。
+ status：响应的 HTTP 状态。
+ statusText：HTTP 状态的说明*/
+		if(((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)) {
+			console.log(xhr.responseText);
+		} else {
+			alert("Request was unsuccessful: " + xhr.status);
+		}
+
+		//2、发送异步请求
+		//此时，可以检测 XHR 对象的 readyState 属性，该属性表示请求响应过程的当前活动阶段。这个属性可取的值如下。
+		/* 0：未初始化。尚未调用 open()方法。
+		 1：启动。已经调用 open()方法，但尚未调用 send()方法
+		 2：发送。已经调用 send()方法，但尚未接收到响应。
+		 3：接收。已经接收到部分响应数据。
+		 4：完成。已经接收到全部响应数据，而且已经可以在客户端使用了*/
+		//只要 readyState 属性的值由一个值变成另一个值，都会触发一次 readystatechange 事件
+
+		var xhrequest = createXHR();
+		xhrequest.open("GET", "../test/1.html", true);
+		xhrequest.send("我是异步请求发送的数据");
+		xhrequest.onreadystatechange = function(event) {
+			if(xhrequest.readyState == 4) {
+				if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+					console.log(xhrequest.responseText);
+				} else {
+					alert("Request was unsuccessful: " + xhr.status);
+				}
+			}
+		}
+		console.log(XMLHttpRequest)
+		console.log(xhrequest);
+		//2、HTTP头部消息
+		/*
+		 * 每个 HTTP 请求和响应都会带有相应的头部信息，其中有的对开发人员有用，有的也没有什么用。
+XHR 对象也提供了操作这两种头部（即请求头部和响应头部）信息的方法。
+		 */
+		/*
+		 * 默认情况下，在发送 XHR 请求的同时，还会发送下列头部信息。
+ Accept：浏览器能够处理的内容类型。
+ Accept-Charset：浏览器能够显示的字符集。
+ Accept-Encoding：浏览器能够处理的压缩编码。
+ Accept-Language：浏览器当前设置的语言。
+ Connection：浏览器与服务器之间连接的类型。
+ Cookie：当前页面设置的任何 Cookie。
+ Host：发出请求的页面所在的域 。
+ Referer：发出请求的页面的 URI。注意，HTTP 规范将这个头部字段拼写错了，而为保证与规
+范一致，也只能将错就错了。（这个英文单词的正确拼法应该是 referrer。）
+ User-Agent：浏览器的用户代理字符串
+		 */
+		//修改http请求头信息；
+		//xhrequest.setRequestHeader(header,value)
+		//得到http响应头信息
+		//xhrequest.getResponseHeader(header);//string
+		//xhrequest.getAllResponseHeaders();//string
+
+		//3、GET请求
+		//GET 是最常见的请求类型，最常用于向服务器查询某些信息。必要时，可以将查询字符串参数追加到 URL 的末尾，以便将信息发送给服务器。
+		//注意：使用 GET 请求经常会发生的一个错误，就是查询字符串的格式有问题。查询字符串中每个参数的名称和值都必须使用 encodeURIComponent()进行编码，然后才能放到 URL 的末尾
+		xhr.open("get", "example.php?name1=value1&name2=value2", true);
+		//对url进行编码
+		function addURLParam(url, name, value) {
+			url += (url.indexOf("?") == -1 ? "?" : "&");
+			url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+			return url;
+		}
+
+		//4、POST请求：
+		/*通常用于向服务器发送应该被保存的数据。POST 请求应该
+把数据作为请求的主体提交，而 GET 请求传统上不是这样。POST 请求的主体可以包含非常多的数据，
+而且格式不限。*/
+		//POST请求数据可以在send(data)中添加，
+		//默认情况下，ajax，post请求与提交表单的post请求是不一样的，所以服务端读取数据的方式也不一样，我们需要在post数据库中找到想要的信息
+		//但是，模拟表单提交的话就可以简单服务端对数据的提取
+		function submitData() {
+			var xhr = createXHR();
+			xhr.onreadystatechange = function() {
+				if(xhr.readyState == 4) {
+					if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+						alert(xhr.responseText);
+					} else {
+						alert("Request was unsuccessful: " + xhr.status);
+					}
+				}
+			};
+			xhr.open("post", "postexample.php", true);
+			//模拟表单提交请求头
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			var form = document.getElementById("user-info");
+			//序列化请求数据
+			xhr.send(serialize(form));
+		}
+		
+	</script>
+
+</html>

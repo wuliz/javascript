@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>1111</title>
+
+	</head>
+
+	<body>
+		<div></div>
+		<div id="test">
+			111
+			<div name="divname"></div>
+			<div></div>
+		</div>
+		<div></div>
+		<div></div>
+		<p id="append"> has</p>
+
+		<h2>深浅复制</h2>
+		<ul id="item">
+			<li>item 1</li>
+			<li>item 2</li>
+			<li> item 3</li>
+		</ul>
+
+		<h3>操作元素</h3>
+		<div id="oper" style="width:100px;" onclick="function(){console.log(11111)}" click="">操作元素</div>
+	</body>
+	<script>
+		(function() {
+			/*domM（文档对象模型）是针对 HTML 和 XML 文档的一个 API（应用程序编程接口）。DOM 描
+												绘了一个层次化的节点树，允许开发人员添加、移除和修改页面的某一部分。
+												1998 年 10 月 DOM１级规范成为 W3C 的推荐标准，为基本的文档结构及查询提供了接口。本章主
+												要讨论与浏览器中的 HTML 页面相关的 DOM1 级的特性和应用，以及 JavaScript 对 DOM1 级的实现。
+												IE、Firefox、Safari、Chrome 和 Opera 都非常完善地实现了 DOM。*/
+
+			//节点层次
+			//DOM 可以将任何 HTML 或 XML 文档描绘成一个由多层节点构成的结构
+
+			//Node类型：DOM1 级定义了一个 Node 接口，该接口将由 DOM 中的所有节点类型实现
+			//这个 Node 接口在JavaScript 中是作为 Node 类型实现的
+			//console.log(window.Node)
+			//每个节点都有一个 nodeType 属性，用于表明节点的类型。节点类型由在 Node 类型中定义的下列
+			/*12 个数值常量来表示，任何节点类型必居其一
+			 Node.ELEMENT_NODE(1)；
+			 Node.ATTRIBUTE_NODE(2)；
+			 Node.TEXT_NODE(3)；
+			 Node.CDATA_SECTION_NODE(4)；
+			 Node.ENTITY_REFERENCE_NODE(5)；
+			 Node.ENTITY_NODE(6)；
+			 Node.PROCESSING_INSTRUCTION_NODE(7)；
+			 Node.COMMENT_NODE(8)；
+			Node.DOCUMENT_NODE(9)；
+			 Node.DOCUMENT_TYPE_NODE(10)；
+			 Node.DOCUMENT_FRAGMENT_NODE(11)；
+			 Node.NOTATION_NODE(12)*/
+
+			//节点关系
+			//节点间的各种关系可以用传统的家族关系来描述，相当于把文档树比喻成家谱
+			//每个节点都有一个 childNodes 属性，其中保存着一个 NodeList 对象。NodeList 是一种类数组对象，用于保存一组有序的节点，可以通过位置来访问这些节点
+
+			//获取子节点的两种方式
+			//var firstChild = someNode.childNodes[0];
+			//var secondChild = someNode.childNodes.item(1);
+			//var count = someNode.childNodes.length;
+			//对 arguments 对象使用 Array.prototype.slice()方法可以将其转换为数组
+			//在 IE8 及之前版本中无效
+			//var arrayOfNodes = Array.prototype.slice.call(someNode.childNodes, 0);
+
+			//每个节点都有一个 parentNode 属性，该属性指向文档树中的父节点,每个节点的 previousSibling和 nextSibling 属性
+
+			//hasChildNodes():在节点包含一或多个子节点的情况下返回 true；
+
+			//操作节点
+			var test = document.getElementById("test");
+			console.log(test.childNodes.length) //5
+			console.log(test.childNodes[0]) //[Object Text]
+
+			var app = document.getElementById("append");
+			console.log(test.parentNode);
+			console.log(test.nextSibling);
+			console.log(test.previousSibling)
+			console.log(test.firstChild);
+			console.log(test.lastChild)
+			test.appendChild(app); //将app节点移到test的节点的内部最后
+
+			console.log(document.title)
+			console.log(document.body)
+
+			//如果是要取到具体的节点
+			/*document.getElementById();
+			document.getElementsByTagName();*/
+
+			//取到节点后可以获取该节点的属性并操作
+
+			var nodes = document.getElementsByTagName("p");
+			console.log(nodes[0].id) //append
+
+			//将节点插入到特定位置
+			//插入后成为最后一个子节点
+			//returnedNode = someNode.insertBefore(newNode, null);
+			//alert(newNode == someNode.lastChild); //true
+
+			//插入后成为第一个子节点
+			//var returnedNode = someNode.insertBefore(newNode, someNode.firstChild);
+			//alert(returnedNode == newNode); //true 
+			//alert(newNode == someNode.firstChild); //true 
+
+			//插入到最后一个子节点前面
+			//returnedNode = someNode.insertBefore(newNode, someNode.lastChild);
+			//alert(newNode == someNode.childNodes[someNode.childNodes.length - 2]); //true 
+
+			//替换节点：
+			//替换第一个子节点
+			//var returnedNode = someNode.replaceChild(newNode, someNode.firstChild);
+			//替换最后一个子节点
+			//returnedNode = someNode.replaceChild(newNode, someNode.lastChild);
+
+			console.log(Node)
+				//移除第一个子节点
+				//var formerFirstChild = someNode.removeChild(someNode.firstChild);
+				//移除最后一个子节点
+				//var formerLastChild = someNode.removeChild(someNode.lastChild);
+
+			//其他方法
+			//cloneNode():cloneNode(deep: Boolean): Node
+			//deep=true:深复制：会复制文档树
+			//deep=false:浅复制：只复制当前节点
+			var list = document.getElementById("item");
+			var newList = list.cloneNode(true);
+			console.log(newList.childNodes.length); //3（IE < 9）或 7（其他浏览器）
+			var newList2 = list.cloneNode(false);
+			console.log(newList2.childNodes.length); //0
+
+			//Document类型
+			/*JavaScript 通过 Document 类型表示文档。在浏览器中，document 对象是 HTMLDocument（继承
+自 Document 类型）的一个实例，表示整个 HTML 页面。而且，document 对象是 window 对象的一个
+属性，因此可以将其作为全局对象来访问。Document 节点具有下列特征：*/
+			/*nodeType 的值为 9；
+ nodeName 的值为"#document"；
+ nodeValue 的值为 null；
+ parentNode 的值为 null；
+ ownerDocument 的值为 null；
+ 其子节点可能是一个 DocumentType（最多一个）、Element（最多一个）、ProcessingInstruction
+或 Comment。*/
+			console.log(document.constructor.name) //HTMLDocument
+
+			console.log(document.childNodes.length); //2:第一个指向<!DOCTYPE html>，第二个指向html元素
+			var doctype = document.doctype;
+			var html = document.documentElement; //始终指向html元素
+			console.log(html == document.childNodes[1]) //true;
+			console.log(doctype == document.childNodes[0]); //true
+			//document 对象还有一个 body 属性，直接指向<body>元素
+			var body = document.body; //取得对<body>的引用
+			console.log(document.documentElement.children[1] == body) //true
+
+			//取得文档标题
+			var originalTitle = document.title;
+			//设置文档标题
+			document.title = "New page title";
+
+			//通过document对象获取url
+			var url = document.URL;
+			console.log(url) //"http://127.0.0.1:8020/javascript/ADoM/1%e7%bb%93%e7%82%b9%e5%b1%82%e6%ac%a1.html"
+				//取得域名
+			var domain = document.domain;
+			console.log(domain); //"127.0.0.1"
+
+			//查找元素
+			//获取dom元素，并对其操作
+			//其中，Document 类型为此提供了两个方法：getElementById()和 getElementsByTagName()。
+
+			var oper = document.getElementById("oper"); ////取得<div>元素的引用
+			//但是，下面的代码在除 IE7 及更早版本之外的所有浏览器中都将返回 null
+			//如果页面中多个元素的 ID 值相同，getElementById()只返回文档中第一次出现的元素
+
+			var divList = document.getElementsByTagName("div");
+			console.log(divList.length); //7
+
+			//HTMLCollection 对象还有一个方法，叫做 namedItem()，使用这个方法可以通过元素的 name特性取得集合中的项。
+			//var divname=divList.nameItem("divname");	
+			//要想取得文档中的所有元素，可以向 getElementsByTagName()中传入"*"。在 JavaScript 及 CSS中，星号（*）通常表示“全部”。下面看一个例子
+			var allElements = document.getElementsByTagName("*");
+			//getElementsByName()。
+			var nameList = document.getElementsByName("divname");
+
+			//文档写入
+			document.write("<strong>" + (new Date()).toString() + "</strong>"); //加到文档最后
+			document.writeln("nihaoma") //
+
+			/*前面的例子使用 document.write()在页面被呈现的过程中直接向其中输出了内容。如果在文档
+加载结束后再调用 document.write()，那么输出的内容将会重写整个页面，如下面的例子所示：*/
+
+			/*			<body> 
+			  <p>This is some content that you won't get to see because it will be overwritten.</p> 
+			  <script type="text/javascript"> 
+			  window.onload = function(){ 
+			  document.write("Hello world!"); 
+			  }; 
+			  <\/script> 
+			</body> */
+
+			//Element类型：。Element 类型用于表现 XML 或 HTML元素，提供了对元素标签名、子节点及特性的访问
+			/*nodeType 的值为 1；
+ nodeName 的值为元素的标签名；
+ nodeValue 的值为 null；
+ parentNode 可能是 Document 或 Element；
+ 其子节点可能是 Element、Text、Comment、ProcessingInstruction、CDATASection 或
+EntityReference。*/
+			//HTMLDivElement继承HTMLElement继承Element
+			var oper = document.getElementById("oper");
+			console.log(window.constructor.name); //Window
+			console.log(document.constructor.name); //HTMLDocument
+			console.log(oper.constructor.name); //"HTMLDivElement"
+
+			//获取element的标签名:标签名始终都以全部大写表示
+			console.log(oper.tagName); //DIV
+			console.log(oper.nodeName); //DIV
+			//获取元素属性和修改元素属性
+
+			console.log(oper.id) //oper
+			oper.id = "opered";
+			console.log(oper.id); //opered
+			oper.className = "operclass";
+			console.log(oper.className); //operclass
+
+			//取得元素特性的方法
+			console.log(oper.getAttribute("id")); //opered
+			console.log(oper.getAttribute("class")); //operclass
+			console.log(oper.getAttribute("title")); //null
+
+			//两类特殊的特性
+			//style和事件属性
+			console.log(oper.style); //CSSStyleDeclaration对象
+			console.log(oper.getAttribute("style")); //string
+			console.log(oper.click) //function
+			console.log(oper.getAttribute("click")); //string
+
+			//设置属性
+			/*与 getAttribute()对应的方法是 setAttribute()，这个方法接受两个参数：要设置的特性名和
+值。如果特性已经存在，setAttribute()会以指定的值替换现有的值；如果特性不存在，setAttribute()
+则创建该属性并设置相应的值。*/
+			oper.setAttribute("id", "operchange");
+			oper.setAttribute("style", "background:yellow");
+			console.log(oper.style); //CSSStyleDeclaration对象
+			console.log(oper.getAttribute("style")); //string
+
+			//attributes属性
+			console.log(document);
+			console.log(oper.attributes); //nameNodeMap对象，数组，键值对存储
+			function outputAttributes(element) {
+				var pairs = new Array(),
+					attrName,
+					attrValue,
+					i,
+					len;
+				for(i = 0, len = element.attributes.length; i < len; i++) {
+					attrName = element.attributes[i].nodeName;
+					attrValue = element.attributes[i].nodeValue;
+					pairs.push(attrName + "=\"" + attrValue + "\"");
+				}
+				return pairs.join(" ");
+			}
+
+			//创建元素：document.createElement()
+			var newdiv = document.createElement("div");
+			newdiv.id = "newdiv";
+			newdiv.innerHTML = "我是新创建的div";
+
+			document.body.appendChild(newdiv);
+			//注意:childNodes不只包含元素节点，可能还有文本节点，注释或处理指令，根据浏览器不同解析也不同
+
+			//Text类型
+			//文本节点由 Text 类型表示，包含的是可以照字面解释的纯文本内容
+			/* nodeType 的值为 3；
+			 nodeName 的值为"#text"；
+			 nodeValue 的值为节点所包含的文本；
+			 parentNode 是一个 Element；
+			 不支持（没有）子节点。
+			可以通过 nodeValue 属性或 data 属性访问 Text 节点中包含的文本，这两个属性中包含的值相
+			同。对 nodeValue 的修改也会通过 data 反映出来，反之亦然。使用下列方法可以操作节点中的文本。
+			 appendData(text)：将 text 添加到节点的末尾。
+			 deleteData(offset, count)：从 offset 指定的位置开始删除 count 个字符。
+			 insertData(offset
+				, text)：在 offset 指定的位置插入 text*/
+			//获取div里面的文字
+			console.log(oper.firstChild.nodeValue); //操作元素
+			oper.childNodes[0].nodeValue = "操作文本元素";
+
+			//创建文本节点
+			var newtext = document.createTextNode("<strong>Hello</strong> world!");
+
+			document.body.appendChild(newtext);
+
+			//一般情况下，一个元素节点下只有一个文本节点，但有例外
+
+			var element = document.createElement("div");
+			element.className = "message";
+			var textNode = document.createTextNode("Hello world!");
+			element.appendChild(textNode);
+			var anotherTextNode = document.createTextNode("Yippee!");
+			element.appendChild(anotherTextNode);
+			document.body.appendChild(element);
+			console.log(element.childNodes.length); //2 
+			//将文本结点合并成一个结点：normailize()
+			element.normalize();
+			console.log(element.childNodes.length); //1 
+			console.log(element.firstChild.nodeValue); // "Hello world!Yippee!" 
+			//与normalize()相对应得方法：splitText()
+			
+			
+			//Comment类型
+			/*注释在 DOM 中是通过 Comment 类型来表示的。Comment 节点具有下列特征：
+ nodeType 的值为 8；
+ nodeName 的值为"#comment"；
+ nodeValue 的值是注释的内容；
+ parentNode 可能是 Document 或 Element；
+ 不支持（没有）子节点*/
+			//注释结点
+			
+			
+			//DocumentType类型
+			//DocumentFragment类型
+			//Attr类型
+		})()
+	</script>
+
+</html>

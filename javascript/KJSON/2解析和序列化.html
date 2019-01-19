@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script type="text/javascript">
+		//JSON流行的原因:便与解析（可以把JSON 数据结构解析为有用的 JavaScript 对象）
+
+		//JSON对象：
+		//早期的 JSON 解析器基本上就是使用 JavaScript 的 eval()函数。
+		//由于 JSON 是 JavaScript 语法的子集，因此 eval()函数可以解析、解释并返回 JavaScript 对象和数组
+
+		var obj = eval({
+			"name": "zhansan",
+			"age": 19
+		});
+		console.log(obj.name); //zhansan;
+
+		//后来 ES5对解析JSON进行了规划，定义了全局对象JSON
+		//JSON对象的两个方法：：stringify()和 parse()。在最简单的情况下，这两个方法分别用于把JavaScript 对象序列化为 JSON 字符串和把 JSON 字符串解析为原生 JavaScript 值。例如
+
+		var book = {
+			title: "Professional JavaScript",
+			authors: [
+				"Nicholas C. Zakas"
+			],
+			edition: 3,
+			year: 2011
+		};
+		var jsonText = JSON.stringify(book);
+		console.log(jsonText); //"{"title":"Professional JavaScript","authors":["Nicholas C. Zakas"],"edition":3,"year":2011}"
+
+		var jsonObj = JSON.parse(jsonText);
+		console.log(jsonObj); //Object { title: "Professional JavaScript", authors: (1) […], edition: 3, year: 2011 }
+		//注意：如果传给 JSON.parse()的字符串不是有效的 JSON，该方法会抛出错误
+		var t = JSON.parse("{\"name\":\"zhas\",\"age\":10}"); //Object { name: "zhas", age: 10 }
+		//注意：JSON字符串转JSON对象时，如果双引号要转义
+
+		//序列化选项：JSON.stringify(json对象，过滤器或数组，选项)
+
+		//1、过滤结果
+		var book = {
+			"title": "Professional JavaScript",
+			"authors": [
+				"Nicholas C. Zakas"
+			],
+			edition: 3,
+			year: 2011
+		};
+		var jsonText = JSON.stringify(book, ["title", "edition"]);
+		console.log(jsonText); //"{"title":"Professional JavaScript","edition":3}";
+		var jsonText = JSON.stringify(book, function(key, value) {
+			switch(key) {
+				case "authors":
+					return value.join(",")
+				case "year":
+					return 5000;
+				case "edition":
+					return undefined;
+				default:
+					return value;
+			}
+		});
+		console.log(jsonText) // "{"title":"Professional JavaScript","authors":"Nicholas C. Zakas","year":5000}"
+			//通过返回 undefined 删除该属性
+
+		//字符串缩进：如果这个参数是一个数值，那它表示的是每个级别缩进的空格数。
+		var book = {
+			"title": "Professional JavaScript",
+			"authors": [
+				"Nicholas C. Zakas"
+			],
+			edition: 3,
+			year: 2011
+		};
+		var jsonText = JSON.stringify(book, null, 4); // "{"title":"Professional JavaScript","authors":"Nicholas C. Zakas","year":5000}"
+
+		//toJSON方法
+		/*
+		 * JSON.stringify()还是不能满足对某些对象进行自定义序列化的需求。在这些情况下，
+可以给对象定义 toJSON()方法，返回其自身的 JSON 数据格式。原生 Date 对象有一个 toJSON()方法，
+能够将JavaScript的Date 对象自动转换成ISO 8601日期字符串（与在Date 对象上调用toISOString()
+的结果完全一样）
+		 */
+
+		var date = new Date();
+		console.log(date.toJSON()); //"2019-01-19T06:47:25.104Z"
+
+		//自定义toJSON方法
+		var book = {
+			title: "Personal javascript",
+			author: ["Nicholas C. Zakas"],
+			edition: 3,
+			toJSON: function() {
+				return "{title :" + this.title + ",author:" + this.author.toString() + ",edition:" + this.edition + "}";
+			}
+		}
+		console.log(book.toJSON()); //"{title :Personal javascript,author:Nicholas C. Zakas,edition:3}"
+
+		//解析选项
+		/*
+		 * JSON.parse()方法也可以接收另一个参数，该参数是一个函数，将在每个键值对儿上调用。为了
+区别 JSON.stringify()接收的替换（过滤）函数（replacer），这个函数被称为还原函数（reviver），
+但实际上这两个函数的签名是相同的——它们都接收两个参数，一个键和一个值，而且都需要返回一
+个值。
+		 */
+		var book = {
+			"title": "Professional JavaScript",
+			"authors": [
+				"Nicholas C. Zakas"
+			],
+			edition: 3,
+			year: 2011,
+			releaseDate: new Date(2011, 11, 1)
+		};
+		var jsonText = JSON.stringify(book);
+		var bookCopy = JSON.parse(jsonText, function(key, value) {
+			if(key == "releaseDate") {
+				return new Date(value);
+			} else {
+				return value;
+			}
+		});
+		console.log(bookCopy.releaseDate.getFullYear());//2011
+	</script>
+
+</html>

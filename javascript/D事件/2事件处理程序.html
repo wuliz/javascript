@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+	</head>
+
+	<body>
+
+		<script>
+			//事件处理程序：事件发生时执行的代码
+			//事件就是用户或浏览器自身执行的某种动作
+			//诸如 click、load 和 mouseover，都是事件的名字。而响应某个事件的函数就叫做事件处理程序（或事件侦听器）
+			//事件处理程序的名字以"on"开头，因此click 事件的事件处理程序就是 onclick，load 事件的事件处理程序就是 onload。
+
+			//HTML事件处理程序
+		</script>
+		<button onclick="console.log('clicked')">Click me</button>
+		<script>
+			//在 HTML 中定义的事件处理程序可以包含要执行的具体动作，也可以调用在页面其他地方定义的脚本，如下面的例子所示：
+			function showMessage(event) {
+				console.log("show message");
+				console.log(event);
+			}
+		</script>
+		<button onclick="showMessage()">showMessage</button>
+		<button id="mess">dom1事件</button>
+		<button id="dom2">通过addEventListener</button>
+		<button id="ie">IE事件处理</button>
+
+		<!--全局变量event-->
+		<button onclick="console.log(event.type)">event对象</button>
+		<!--click-->
+
+		<script>
+			//DOM0级事件处理程序
+			//DOM0 级对每个事件只支持一个事件处理程序
+			var mess = document.getElementById("mess");
+
+			mess.onclick = function() {
+				console.log("clicked");
+				console.log(this.id);
+			}
+
+			//删除事件处理程序
+			mess.onclick = null;
+
+			//DOM2级事件处理程序
+			/*DOM2级事件”定义了两个方法，用于处理指定和删除事件处理程序的操作：addEventListener()
+和 removeEventListener()。所有 DOM 节点中都包含这两个方法*/
+			//addEventListener(type: EventString, listener: EventListener, useCapture: Boolean): void;
+			var dom2 = document.getElementById("dom2");
+			dom2.addEventListener("click", function() {
+				console.log("我被点击了！");
+				console.log(this.id);
+			}, false);
+			//DOm2添加事件的好处：可以给一个事件添加多个处理程序
+			dom2.addEventListener("click", function() {
+				console.log("我是第二个事件处理程序");
+			}, false);
+			//通过 addEventListener()添加的事件处理程序只能使用 removeEventListener()来移除；移除时传入的参数与添加处理程序时使用的参数相同。
+
+			dom2.removeEventListener("click", function() {
+				//注意：这也意味着通过 addEventListener()添加的匿名函数将无法移除
+				console.log("我被点击了！");
+				console.log(this.id);
+			}, false);
+
+			function handle() {
+				console.log("我不是匿名函数添加的事件处理程序");
+			}
+			dom2.addEventListener("click", handle, false);
+			//移除事件处理程序
+			dom2.removeEventListener("click", handle, false);
+
+			//IE事件处理程序
+			var ie = document.getElementById("ie");
+			ie.attachEvent("onclick", function() {
+				console.log("Clicked");
+			});
+
+			//能力检测
+			var EventUtil = {
+
+				addHandler: function(element, type, handler) {
+					if(element.addEventListener) {
+						element.addEventListener(type, handler, false);
+					} else if(element.attachEvent) {
+						element.attachEvent("on" + type, handler);
+					} else {
+						element["on" + type] = handler;
+					}
+				},
+				removeHandler: function(element, type, handler) {
+					if(element.removeEventListener) {
+						element.removeEventListener(type, handler, false);
+					} else if(element.detachEvent) {
+						element.detachEvent("on" + type, handler);
+					} else {
+						element["on" + type] = null;
+					}
+				}
+			};
+		</script>
+	</body>
+
+</html>

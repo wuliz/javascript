@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<select name="location" id="selLocation">
+			<option value="Sunnyvale, CA">Sunnyvale</option>
+			<option value="Los Angeles, CA">Los Angeles</option>
+			<option value="Mountain View, CA">Mountain View</option>
+			<option value="">China</option>
+			<option value="test"></option>
+			<option>Australia</option>
+		</select>
+	</body>
+	<script>
+		//选择框是通过<select>和<option>元素创建的。为了方便与这个控件交互，除了所有表单字段共有的属性和方法外，HTMLSelectElement 类型还提供了下列属性和方法。
+		/*add(newOption, relOption)：向控件中插入新<option>元素，其位置在相关项（relOption）
+之前。
+ multiple：布尔值，表示是否允许多项选择；等价于 HTML 中的 multiple 特性。
+ options：控件中所有<option>元素的 HTMLCollection。
+ remove(index)：移除给定位置的选项。
+ selectedIndex：基于 0 的选中项的索引，如果没有选中项，则值为-1。对于支持多选的控件，
+只保存选中项中第一项的索引。
+ size：选择框中可见的行数；等价于 HTML 中的 size 特性。
+选择框的 type 属性不是"select-one"，就是"select-multiple"，这取决于 HTML 代码中有
+没有 multiple 特性。选择框的 value 属性由当前选中项决定，相应规则如下。
+ 如果没有选中的项，则选择框的 value 属性保存空字符串。
+ 如果有一个选中项，而且该项的 value 特性已经在 HTML 中指定，则选择框的 value 属性等
+于选中项的 value 特性。即使 value 特性的值是空字符串，也同样遵循此条规则。
+ 如果有一个选中项，但该项的 value 特性在 HTML 中未指定，则选择框的 value 属性等于该
+项的文本。
+ 如果有多个选中项，则选择框的 value 属性将依据前两条规则取得第一个选中项的值。*/
+		//在 DOM 中，每个<option>元素都有一个 HTMLOptionElement 对象表示。为便于访问数据，
+		//HTMLOptionElement 对象添加了下列属性：
+		/*index：当前选项在 options 集合中的索引。
+ label：当前选项的标签；等价于 HTML 中的 label 特性。
+ selected：布尔值，表示当前选项是否被选中。将这个属性设置为 true 可以选中当前选项。
+ text：选项的文本。
+ value：选项的值（等价于 HTML 中的 value 特性）。*/
+		//选择选项
+
+		var select = document.getElementById("selLocation");
+		var option = select.options[select.selectedIndex];
+		console.log("Selected index: " + select.selectedIndex + "\nSelected text: " +
+			option.text + "\nSelected value: " + option.value);
+
+		//通过js将某一项设为选中
+		select.options[2].selected = true;
+
+		//找到选项框中选中的那一项
+		function getSelectedOptions(selectbox) {
+			var result = new Array();
+			var option = null;
+			for(var i = 0, len = selectbox.options.length; i < len; i++) {
+				option = selectbox.options[i];
+				if(option.selected) {
+					result.push(option);
+				}
+			}
+			return result;
+		}
+
+		//找到选中项的数组
+		var selectbox = document.getElementById("selLocation");
+		var selectedOptions = getSelectedOptions(selectbox);
+		var message = "";
+		for(var i = 0, len = selectedOptions.length; i < len; i++) {
+			message += "Selected index: " + selectedOptions[i].index +
+				"\nSelected text: " + selectedOptions[i].text +
+				"\nSelected value: " + selectedOptions[i].value + "\n\n";
+		}
+		console.log(message);
+
+		//添加选项
+		//动态添加option选项到select列表中,下面有两种方式
+		//第一种方式：
+		var newOption = document.createElement("option");
+		newOption.appendChild(document.createTextNode("Option text"));
+		newOption.setAttribute("value", "Option value");
+		selectbox.appendChild(newOption);
+		//第二种方式:Option 构造函数接受两个参数：文本（text）和值（value）；第二个参数可选
+
+		var newOption2 = new Option("iam new", "new");
+
+		selectbox.appendChild(newOption2); ///在 IE8 及之前版本中有问题
+
+		var option2 = newOption2.cloneNode(true);
+
+		selectbox.add(option2); ////最佳方案
+
+		//如果想把节点插入指定位置：insertBefore()
+
+		//移除选项：removeChild(节点)
+		selectbox.removeChild(selectbox.options[2]);
+		//或者：remove()
+		selectbox.remove(0); //移除第一个选项
+		//或者：就是将相应选项设置为 null
+		selectbox.options[0] = null; //移除第一个选项
+		//要清除选择框中所有的项，需要迭代所有选项并逐个移除它们，如下面的例子所示：
+		function clearSelectbox(selectbox) {
+			for(var i = 0, len = selectbox.options.length; i < len; ) {
+				selectbox.remove(i);
+			}
+		}
+		//这个函数每次只移除选择框中的第一个选项。由于移除第一个选项后，所有后续选项都会自动向上
+//移动一个位置，因此重复移除第一个选项就可以移除所有选项了
+		clearSelectbox(selectbox);
+		
+		//
+	</script>
+
+</html>

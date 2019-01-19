@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			/*location 是最有用的 BOM 对象之一，它提供了与当前窗口中加载的文档有关的信息，还提供了一
+																		些导航功能。事实上，location 对象是很特别的一个对象，因为它既是 window 对象的属性，也是
+																		document 对象的属性,window.location 和 document.location 引用的是同一个对象*/
+			//console.log(location.serach);
+			//window.location.href+="?name=zhans&age=18";
+
+			//查询字符串参数
+			//取得查询字符串并去掉开头的问号
+			window.location.search.substring(1);
+
+			function getQueryStringArgs() {
+				var se = "?name=zhan&age=17";
+				var qs = se.length > 0 ? se.substring(1) : "";
+				console.log(qs)
+					//保存数据的对象
+				args = {};
+				//取得每一项
+				var items = qs.length > 0 ? qs.split("&") : [];
+				item = null,
+					name = null,
+					value = null,
+					//在 for 循环中使用
+					i = 0,
+					len = items.length;
+				//逐个将每一项添加到 args 对象中
+				for(i = 0; i < len; i++) {
+					item = items[i].split("=");
+					name = decodeURIComponent(item[0]);
+					value = decodeURIComponent(item[1]);
+					if(name.length) {
+						args[name] = value;
+					}
+				}
+				console.log(args)
+				return args;
+			}
+			var obj = getQueryStringArgs();
+			console.log(obj.name)
+
+			//位置操作
+			//使用 location 对象可以通过很多方式来改变浏览器的位置
+			//在当前页修改，一下三种方式
+			//location.assign("http://baidu.com")
+			window.location = "http://www.wrox.com";
+			//location.href = "http://www.wrox.com";
+
+			//location.reload(); //重新加载（有可能从缓存中加载）
+			//location.reload(true); //重新加载（从服务器重新加载）
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

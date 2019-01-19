@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			
+			
+			//乘性运算符
+			/*
+			 规则：常规运算
+			 超出最大表示数：Infinity
+			 一个操作数为Nan:结果为Nan
+			 Infinity*0=nan
+			 infinity*非零数=infinity
+			 infinity*infinnity=infinity
+			 如果有一个操作数不是数值，后台调用number（）方法，再根据上面规则运算
+			 * */
+			/*console.log(35*10);
+			console.log(Infinity*10);//infinity
+			console.log(Infinity*0);//nan
+			console.log("123"*"12");//1476*/
+			
+			//关系操作符
+			/*
+			 数字与数字比较：常规比较
+			 字母与数字比较：字母能转成数字就变成数字与数字比较，否则为false
+			 字符与字符比较：比较ASCII码
+			 * */
+			/*console.log(23<10);//false
+			console.log("12"<13);//true
+			console.log("a"<12);//false
+			console.log("a"<"b");//true
+			*/
+			
+			//相等运算符
+			//全等和不全等：全等是指除值相同，类型也要一致；不全等是指值相同
+			console.log("12"==12);//true
+			console.log("123"===123);//false
+			
+			//条件运算符   表达式1？结果1：结果2
+			
+			//赋值运算符
+			//逗号运算符
+			
+			var num1=1,num2=2;
+			var a=(1,2,2,2,6,7);
+			console.log(num1,num2);
+			console.log(a);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

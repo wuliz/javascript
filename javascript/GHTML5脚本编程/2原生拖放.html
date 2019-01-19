@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="" id="test" draggable="true">111111111111</div>
+		
+		<div class="" id="test2" style="background: yellow;width: 500px;height: 500px;"></div>
+	</body>
+	<script>
+		//拖放：可以拖动网页中的元素
+		//说到拖放，最有意思的恐怕就是能够在框架间、窗口间，甚至在应用间拖放网页元素了。浏览器对拖放的支持为实现这些功能提供了便利。
+		
+		//拖放事件
+		//下面三个事件的目标都是被拖动的元素
+		//拖动事件时，依次发生的事件：dragstart drag dragend
+		//当某个元素被拖动到一个有效的放置目标上时，下列事件会依次发生：
+		//dragenter  dragover dragleave 或 drop
+		var test=document.getElementById("test");
+		test.ondrag=function(){
+			console.log("test");
+		}
+		var test2=document.getElementById("test2");
+		test2.ondragover=function(event){
+			event.preventDefault();
+			console.log("test2over");
+		}
+		test2.ondragenter=function(event){
+			event.preventDefault();
+			console.log("test2enter");
+		}
+		
+		//	dataTransfer对象：是事件拖放的事件对象的一个属性：用于从被拖动元素向放置目标传递字符串格式的数据。
+		
+	</script>
+</html>

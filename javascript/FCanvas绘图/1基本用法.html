@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<!--可以用dom属性，也可以用css来定义宽度和高度-->
+		<canvas width="400px" height="400px" id="drawing" style=""> A drawing of something.</canvas>
+	</body>
+	<script>
+		//<canvas>元素最早是由苹果公司推出的，当时主要用在其 Dashboard 微件中
+		/*
+		 * 与浏览器环境中的其他组件类似，<canvas>由几组 API 构成，但并非所有浏览器都支持所有这些
+API。除了具备基本绘图能力的 2D 上下文，<canvas>还建议了一个名为 WebGL 的 3D 上下文。目前，
+支持该元素的浏览器都支持 2D 上下文及文本 API，但对 WebGL 的支持还不够好。由于 WebGL 还是实
+验性的，因此要得到所有浏览器支持还需要很长一段时间
+		 */
+
+		//基本用法
+		//创建一个canvas元素：必须有宽度和高度，因为canvas是一个画布
+		//获取canvas的引用，并获取上下文对象
+		var drawing = document.getElementById("drawing");
+		//console.log(drawing.constructor.name); //HTMLCanvasElement对象
+		//确定浏览器支持<canvas>元素
+		if(drawing.getContext) {
+
+			var context = drawing.getContext("2d");
+			//取得canvas的内容:图像数据URI
+			//通过base转码的
+			var imgURI = drawing.toDataURL("image/png");
+			console.log(imgURI); //
+			//显示图像
+			var img = document.createElement("img");
+			img.style.border = "1px solid green";
+			img.src = imgURI;
+			document.body.appendChild(img);
+
+			//2D上下文
+			/*
+			 * 使用 2D 绘图上下文提供的方法，可以绘制简单的 2D 图形，比如矩形、弧线和路径。2D 上下文的
+坐标开始于<canvas>元素的左上角，原点坐标是(0,0)。所有坐标值都基于这个原点计算，x 值越大表示
+越靠右，y 值越大表示越靠下。默认情况下，width 和 height 表示水平和垂直两个方向上可用的像素
+数目
+			 */
+			//填充和描边
+			//填充，就是用指定的样式（颜色、渐变或图像）填充图形；描边，就是只在图形的边缘画线。
+			//涉及到的上下文对象的属性：：fillStyle 和 strokeStyle
+			context.strokeStyle = "red"; //定义描边颜色
+			context.fillStyle = "#0000ff"; //定义填充颜色
+			//绘制黄色矩形
+			context.fillStyle = "yellow";
+			context.fillRect(10, 10, 50, 50);
+			context.strokeRect(90, 30, 50, 50)
+				//绘制半透明的蓝色矩形
+			context.fillStyle = "rgba(0,0,255,0.5)";
+			context.fillRect(30, 30, 50, 50);
+
+			//定义画笔的样式
+			//context.fillStyle="red"
+			//context.strokeStyle="yellow"
+			//context.lineWidth=18;
+			//context.lineCap="butt"//butt,round,squere,平头圆头和方头
+
+			//clearRect():用于清除画布上的矩形区域
+			//绘制红色矩形
+			context.fillStyle = "#ff0000";
+			context.fillRect(100, 100, 50, 50);
+			//绘制半透明的蓝色矩形
+			context.fillStyle = "rgba(0,0,255,0.5)";
+			context.fillRect(100, 100, 50, 50);
+
+			//在两个矩形重叠的地方清除一个小矩形
+			context.clearRect(40, 40, 10, 10);
+
+			//绘制路径
+			/*2D 绘制上下文支持很多在画布上绘制路径的方法。通过路径可以创造出复
+杂的形状和线条。要绘制路径，首先必须调用 beginPath()方法，表示要开始
+绘制新路径。然后，再通过调用下列方法来实际地绘制路径。*/
+			/*
+			 * arc(x, y, radius, startAngle, endAngle, counterclockwise)：以(x,y)为圆心绘
+制一条弧线，弧线半径为 radius，起始和结束角度（用弧度表示）分别为 startAngle 和
+endAngle。最后一个参数表示 startAngle 和 endAngle 是否按逆时针方向计算，值为 false
+表示按顺时针方向计算。
+ arcTo(x1, y1, x2, y2, radius)：从上一点开始绘制一条弧线，到(x2,y2)为止，并且以
+给定的半径 radius 穿过(x1,y1)。
+ bezierCurveTo(c1x, c1y, c2x, c2y, x, y)：从上一点开始绘制一条曲线，到(x,y)为
+止，并且以(c1x,c1y)和(c2x,c2y)为控制点。
+ lineTo(x, y)：从上一点开始绘制一条直线，到(x,y)为止。
+ moveTo(x, y)：将绘图游标移动到(x,y)，不画线。
+ quadraticCurveTo(cx, cy, x, y)：从上一点开始绘制一条二次曲线，到(x,y)为止，并
+且以(cx,cy)作为控制点。
+ rect(x, y, width, height)：从点(x,y)开始绘制一个矩形，宽度和高度分别由 width 和
+height 指定。这个方法绘制的是矩形路径，而不是 strokeRect()和 fillRect()所绘制的独
+立的形状。
+			 */
+
+			context.strokeStyle = "red";
+
+			context.beginPath();
+			//绘制外圆
+			context.arc(100, 100, 99, 0, 2 * Math.PI, false);
+			//绘制内圆
+			context.moveTo(194, 100);
+			context.arc(100, 100, 94, 0, 2 * Math.PI, false);
+			//绘制分针
+			context.moveTo(100, 100);
+			context.lineTo(100, 15);
+			//绘制时针
+			context.moveTo(100, 100);
+			context.lineTo(35, 100);
+			//描边路径
+			context.stroke();
+
+			//绘制文本
+			/*
+			 * 绘制文本主要有两个
+方法：fillText()和 strokeText()。这两个方法都可以接收 4 个参数：要绘制的文本字符串、x 坐
+标、y 坐标和可选的最大像素宽度。而且，这两个方法都以下列 3 个属性为基础。
+			 */
+
+			//。而且，这两个方法都以下列 3 个属性为基础。
+			/*
+			 * font：表示文本样式、大小及字体，用 CSS 中指定字体的格式来指定，例如"10px Arial"。
+ textAlign：表示文本对齐方式。可能的值有"start"、"end"、"left"、"right"和"center"。
+建议使用"start"和"end"，不要使用"left"和"right"，因为前两者的意思更稳妥，能同时
+适合从左到右和从右到左显示（阅读）的语言。
+ textBaseline：表示文本的基线。可能的值有"top"、"hanging"、"middle"、"alphabetic"、
+"ideographic"和"bottom"
+			 */
+			context.font = "微软雅黑";
+			context.textAlign = "center";
+			context.textBaseline = "middle";
+
+			context.fillText("hello", 300, 300);
+			
+
+			//变换
+			//通过上下文的变换，可以把处理后的图像绘制到画布上
+			/*
+		 * rotate(angle)：围绕原点旋转图像 angle 弧度。
+ scale(scaleX, scaleY)：缩放图像，在 x 方向乘以 scaleX，在 y 方向乘以 scaleY。scaleX
+和 scaleY 的默认值都是 1.0。
+ translate(x, y)：将坐标原点移动到(x,y)。执行这个变换之后，坐标(0,0)会变成之前由(x,y)
+表示的点。
+ transform(m1_1, m1_2, m2_1, m2_2, dx, dy)：直接修改变换矩阵，方式是乘以如下
+矩阵。
+m1_1 m1_2 dx 
+m2_1 m2_2 dy 
+0 0 1 
+ setTransform(m1_1, m1_2, m2_1, m2_2, dx, dy)：将变换矩阵重置为默认状态，然后
+再调用 transform()
+		 */
+		
+		
+		context.beginPath();
+		context.translate(300,300);
+		context.lineTo(300.200);
+		context.stroke();
+		}
+	</script>
+
+</html>

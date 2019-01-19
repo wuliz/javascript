@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+	</head>
+
+	<body>
+		<div class="username"></div>
+		<div class="current"></div>
+		<div id="myDiv">
+			<div class="select age has" id="dd"></div>
+		</div>
+		<div id="ini" data-appid="12345" data-name="nickel"></div>
+		<script>
+			//与类相关的扩充
+			//由于class属性的广泛应用，所以JavaScript新增了对类的操作
+
+			//getElementsByClassName(classNames: ClassString): NodeList
+			//取得所有类中包含"username"和"current"的元素，类名的先后顺序无所谓
+			var allCurrentUsernames = document.getElementsByClassName("current");
+			//取得 ID 为"myDiv"的元素中带有类名"selected"的所有元素
+			var selected = document.getElementById("myDiv").getElementsByClassName("selected");
+			console.log(allCurrentUsernames);
+
+			//删除类
+			//删除"age"类
+			//首先，取得类名字符串并拆分成数组
+			var classNames = document.getElementById("dd").className.split(/\s+/);
+			//找到要删的类名
+			var pos = -1,
+				i,
+				len;
+			for(i = 0, len = classNames.length; i < len; i++) {
+				if(classNames[i] == "age") {
+					pos = i;
+					break;
+				}
+			}
+			//删除类名
+			/*classNames.splice(i, 1);
+			//把剩下的类名拼成字符串并重新设置
+			document.getElementById("dd").className = classNames.join(" ");
+			console.log(document.getElementById("dd").className); 
+			*/
+			/*
+			 var dd = document.getElementById("dd");
+			dd.classList.add("age");
+			console.log(dd.className);
+			dd.classList.remove("selected");
+			
+			console.log(dd.classList.contains("age"));
+			dd.classList.toggle("sex");
+			*/
+
+			//HTMLDocument的扩展
+
+			//1readyState属性
+			/*loading，正在加载文档；
+ complete，已经加载完文档。*/
+			console.log(document.readyState) //loading
+				//head属性
+
+			console.log(document.head.tagName); //HEAD
+			//字符集属性
+			console.log(document.characterSet); //utf-8
+			//自定义数据属性
+			/*HTML5 规定可以为元素添加非标准的属性，但要添加前缀 data-，目的是为元素提供与渲染无关的
+信息，或者提供语义信息。这些属性可以任意添加、随便命名，只要以 data-开头即可。来看一个例子*/
+			/*添加了自定义属性之后，可以通过元素的 dataset 属性来访问自定义属性的值。dataset 属性的
+			值是 DOMStringMap 的一个实例，也就是一个名值对儿的映射。在这个映射中，每个 data-name 形式
+			的属性都会有一个对应的属性，只不过属性名没有 data-前缀（比如，自定义属性是 data-myname，
+			那映射中对应的属性就是 myname）。还是看一个例子吧。*/
+
+			//取自定义属性的值
+
+			var appid = document.getElementById("ini").dataset.appid;
+			console.log(appid) //12345
+			
+			//插入标记
+			//innerHTMl属性
+			//优点：不用再像之前一样需要创建节点再插入，
+			//注意：innerHtml里面替换的节点没有被删除完全，是占内存的，建议手动删除
+			
+			//scrollIntoView()方法
+		
+		</script>
+	</body>
+
+</html>

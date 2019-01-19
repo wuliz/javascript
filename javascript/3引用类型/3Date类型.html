@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+		<script>
+			//Date对象的基本使用
+			//Date对象的创建
+			//1、不带参数：默认当前事件
+
+			/*var date = new Date(); //1970,1,1 为计算机的创建时间
+			console.log(date); //Date 2018-11-25T00:29:16.778Z(火狐)
+			//2、带参数创建，Date.parse():，Date.parse()方法接收一个表示日期的字符串参数，然后尝试根据这个字符串返回相应日期的毫秒数。
+
+			var date2 = new Date("May 25,2004") //接收一个日期字符串参数
+			var date3 = new Date(Date.parse("May 25,2004"));
+			console.log(date2); //Date 2004-05-24T16:00:00.000Z
+			console.log(date3); //Date 2004-05-24T16:00:00.000Z*/
+			//date可以接收的参数格式在各个浏览器中不同
+			/*月/日/年”，如 6/13/2004；
+ 			“英文月名 日,年”，如 January 12,2004；
+			“英文星期几 英文月名 日 年 时:分:秒 时区”，如 Tue May 25 2004 00:00:00 GMT-0700。
+		    ISO 8601 扩展格式 YYYY-MM-DDTHH:mm:ss.sssZ（例如 2004-05-25T00:00:00）。只有兼容
+            ECMAScript 5 的实现*/
+
+			//Date.UTC();返回当前时间的毫秒数：必须是两个参数以上：分别是年，月，日，时，分，秒；
+			//注意：月份：1月是0；二月是1
+
+			/*var date4 = new Date(Date.UTC(2018, 10, 25, 8));
+			console.log(date4); //Date 2018-11-25T08:00:00.000Z
+
+			//取当前时间毫秒数：Date.now();
+
+			var start = Date.now();
+			var z;
+			for(var i = 0; i < 10000000; i++) {
+				z = z + i;
+			}
+			var end = Date.now();
+			console.log(end - start); //37毫秒*/
+
+			//Date继承的方法
+			//date重写的方法：toLocaleString()、toString()和 valueOf()：（返回日期的毫秒表示，可以用来比较日期）方法；（根据浏览器的不同显示不同）
+
+		/*	var date = new Date();
+			console.log(date.toLocaleString()); //2018/11/25 上午8:37:32 3Date类型.html:49:12
+			console.log(date.toString()); //Sun Nov 25 2018 08:37:32 GMT+0800 (中国标准时间)
+*/
+			//日期格式化方法
+			   //toDateString()——以特定于实现的格式显示星期几、月、日和年；
+			 // toTimeString()——以特定于实现的格式显示时、分、秒和时区；
+			 //toLocaleDateString()——以特定于地区的格式显示星期几、月、日和年；
+			 //toLocaleTimeString()——以特定于实现的格式显示时、分、秒；
+			 //toUTCString()——以特定于实现的格式完整的 UTC 日期。
+			
+			var date2 = new Date("May 25,2004")
+			//console.log(date.toString());
+			//console.log(date.toTimeString());
+			//console.log(date.toLocaleDateString());
+			//console.log(date.toLocaleTimeString());
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

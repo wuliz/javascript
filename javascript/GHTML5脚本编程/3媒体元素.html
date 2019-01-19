@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<h1>嵌入视频</h1>
+		<!--<video src="62227697-1-6.mp4" id="myVideo">Video player not available.</video> -->
+		<!--因为并非所有浏览器都支持所有媒体格式，所以可以指定多个不同的媒体来源。为此，不用在标签
+中指定 src 属性，而是要像下面这样使用一或多个<source>元素。-->
+		<video width="800" height="600">
+			<source src="62227697-1-6.mp4" type="video/mp4"></source>
+			<source src="62227697-1-6.ogv" type="video/ogg"></source>
+			<object width="" height="" type="application/x-shockwave-flash" data="myvideo.swf">
+				<param name="movie" value="myvideo.swf" />
+				<param name="flashvars" value="autostart=true&amp;file=myvideo.swf" />
+			</object> 当前浏览器不支持 video直接播放，点击这里下载视频：
+			<a href="myvideo.webm">下载视频</a>
+		</video>
+		<h1>嵌入音频</h1>
+	</body>
+	<script>
+		/*
+				 * 随着音频和视频在 Web 上的迅速流行，大多数提供富媒体内容的站点为了保证跨浏览器兼容性，
+		不得不选择使用 Flash。HTML5 新增了两个与媒体相关的标签，让开发人员不必依赖任何插件就能在网
+		页中嵌入跨浏览器的音频和视频内容。这两个标签就是<audio>和<video>。
+				 */
+		//重要属性
+		//width,height,controls,autoplay,loop,src
+		//重要事件
+		//abort（下载中止），pause(暂时)，。。。。。
+
+		//并非所有的游览器都支持video和audio的编解码器，这意为着你要提供多个播放来源
+		//检测浏览器编解码器的支持情况
+		//canPlayType()方法
+		if(audio.canPlayType("audio/mpeg")) {
+			//进一步处理
+		}
+	</script>
+
+</html>

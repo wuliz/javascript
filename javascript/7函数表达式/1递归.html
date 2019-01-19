@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			//函数
+			//定义函数的两种方式：函数声明、函数表达式
+			//函数声明
+			//函数声明提升：在执行代码之前会先读取函数声明，意为着函数调用可在函数声明之前
+			function functionName(arg0, arg1, arg2) {
+				//函数体
+			}
+
+			//函数表达式
+			//这种情况声明的函数被叫做匿名函数
+			//函数表达式于其他表达式一样，使用前必须先赋值
+			var functionName = function(arg0, arg1, arg2) {
+				//函数体 
+			};
+
+			sayHi(); //错误：函数还不存在
+			var sayHi = function() {
+				console.log("Hi!");
+			};
+
+			//不要这样做！ 
+			if(condition) {
+				function sayHi() {
+					console.log("Hi!");
+				}
+			} else {
+				function sayHi() {
+					console.log("Yo!");
+				}
+			}
+			//可以这样做
+			var condition = true;
+			var sayHi;
+			if(condition) {
+				sayHi = function() {
+					console.log("Hi!");
+				};
+			} else {
+				sayHi = function() {
+					console.log("Yo!");
+				};
+			}
+
+			//递归
+			//递归函数是在一个函数通过名字调用自身的情况下构成的
+
+			function factorial(num) {
+				if(num <= 1) {
+					return 1;
+				} else {
+					return num * factorial(num - 1);
+				}
+			}
+			//这是一个经典的递归阶乘函数。虽然这个函数表面看来没什么问题，但下面的代码却可能导致它出错。
+			/*	var anotherFactorial = factorial;
+				factorial = null;
+				console.log(anotherFactorial(4)); //出错！*/
+			//由于factorial不再是函数
+
+			//arguments.callee 是一个指向正在执行的函数的指针，因此可以用它来实现对函数的递归调用
+			function factorial(num) {
+				if(num <= 1) {
+					return 1;
+				} else {
+					return num * arguments.callee(num - 1);
+				}
+			}
+			var anotherFactorial = factorial;
+			factorial = null;
+			console.log(anotherFactorial(4)); //24
+
+			//但在严格模式下，不能通过脚本访问 arguments.callee，访问这个属性会导致错误。不过，可以使用命名函数表达式来达成相同的结果
+			var factorial = (function f(num) {
+				if(num <= 1) {
+					return 1;
+				} else {
+					return num * f(num - 1);
+				}
+			});
+			var anotherFactorial = factorial;
+			factorial = null;
+			console.log(anotherFactorial(4)); //24
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

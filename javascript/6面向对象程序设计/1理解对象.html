@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			/*
+																	 * ECMA-262 把对象定义为：“无序属性的集合，其属性可以包含基本值、对象或者函数。”严格来讲，
+															这就相当于说对象是一组没有特定顺序的值。对象的每个属性或方法都有一个名字，而每个名字都映射
+															到一个值。正因为这样（以及其他将要讨论的原因），我们可以把 ECMAScript 的对象想象成散列表：无
+															非就是一组名值对，其中值可以是数据或函数。
+																	 */
+			//javascript中的对象可以理解为散列表；一个名字对应一个值，这个值可以是基本类型也可以是引用类型
+
+			/*var person = new Object();
+			person.name = "wlz";
+			person.age = 20;
+			person.sayName = function() {
+				console.log(this.name);
+			}
+			var da = new Date();
+			da
+			person.sayName(); //wlz,this指向这个对象*/
+			/*var arr1="保湿、水润、4、5".split("、");
+			console.log(arr1.valueOf())*/
+
+			//属性类型：数据属性和访问器属性
+			//数据属性：
+			//Configurable：可否删除
+			//Enumerable：可否使用for in访问属性
+			//Writable：可否修改
+			//Value：属性值
+			var person = {};
+			Object.defineProperty(person, "name", {
+					writable: false,
+					value: "niclause"
+				}) //name属性不可修改
+			console.log(person.name); //niclause
+			person.name = "zhangsna";
+			console.log(person.name); //niclause
+
+			//访问器属性
+			//Configurable
+			//Enumerable
+			//Get]
+			//Set
+			var book = {
+				_year: 2004,
+				edition: 1
+			};
+			Object.defineProperty(book, "year", {
+				get: function() {
+					return this._year;
+				},
+				set: function(newvalue) {
+					if(newvalue > 2014) {
+						this._year = newvalue;
+						this.edition += newvalue - 2014
+					}
+				}
+			})
+			book.year = 2015;
+			console.log(book.edition) //2
+
+			//为对象定义多个属性
+			var book = {};
+			Object.defineProperties(book, {
+				_year: {
+					value: 2014
+				},
+				edition: {
+					value: 1
+				},
+				year: {
+					get: function() {
+						return this._year;
+					},
+					set: function(newvalue) {
+						if(newvalue > 2014) {
+							this._year = newvalue;
+							this.edition += newvalue - 2014
+						}
+					}
+
+				}
+			})
+			console.log(book)
+				//读取属性的特性
+				/*
+			 * 对于数据属性_year，value 等于最初的值，configurable 是 false，而 get 等于 undefined。
+				对于访问器属性 year，value 等于 undefined，enumerable 是 false，而 get 是一个指向 getter
+				函数的指针
+			 */
+			var descriptor = Object.getOwnPropertyDescriptor(book, "_year");
+			console.log(descriptor.value); //2004 
+			console.log(descriptor.configurable); //false 
+			console.log(typeof descriptor.get); //"undefined" 
+			var descriptor = Object.getOwnPropertyDescriptor(book, "year");
+			console.log(descriptor.value); //undefined 
+			console.log(descriptor.enumerable); //false 
+			console.log(typeof descriptor.get); //"function"
+			
+		</script>
+
+	</head>
+
+	<body>
+		<p>12</p>
+		<p>34</p>
+	</body>
+
+</html>

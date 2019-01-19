@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script type="text/javascript">
+		//错误处理：由于多数浏览器对于JavaScript发生错误是不对用户可见的，即使用户可见，一般用户也难以明白错误是什么
+		//所以我们如何提醒浏览器某一个可能发生错误发生了错误怎么办？
+
+		//try catch语句
+		function test() {
+			try {
+				console.log(a);
+				return 0;
+			} catch(e) {
+				//TODO handle the exception
+				console.log(e.name); //ReferenceError 
+				console.log(e.message); //a is not defined
+				return 1;
+			} finally {
+				//finally语句：不管有无报错，都要执行的代码
+				return 2;
+			}
+		}
+		test();
+		//catch 和finally有一个即可，也可以两个都有
+		/*
+		 * 表面上看，调用这个函数会返
+回 2，因为返回 2 的 return 语句位于 try 语句块中，而执行该语句又不会出错。可是，由于最后还有
+一个 finally 子句，结果就会导致该 return 语句被忽略；也就是说，调用这个函数只能返回 0。如果
+把 finally 子句拿掉，这个函数将返回 2
+		 */
+		console.log(1 + 2 + "a"); //3a
+		console.log(1 + 2 + "a" + 6 + 6); //3a66
+
+		//错误类型
+		//执行代码期间可能会发生的错误有多种类型。每种错误都有对应的错误类型，而当错误发生时，就会抛出相应类型的错误对象。
+		//ECMA-262 定义了下列 7 种错误类型
+		/*
+		 * Error：所有错误类型的基类 
+		 EvalError ：EvalError 类型的错误会在使用 eval()函数而发生异常时被抛出。当没有将eval作为函数使用时会抛出异常
+ 		RangeError ：数值超出相应范围时触发
+		 ReferenceError :找不到对象时会抛出
+ 		SyntaxError ：当我们把语法错误的 JavaScript 字符串传入 eval()函数时，就会导致此类错误。
+ 		TypeError :TypeError 类型在 JavaScript 中会经常用到，在变量中保存着意外的类型时，或者在访问不存在的
+方法时，都会导致这种错误。错误的原因虽然多种多样，但归根结底还是由于在执行特定于类型的操作
+时，变量的类型并不符合要求所致。下面来看几个例子。
+ 		URIError 
+		 */
+		try {
+			new eval(); // function eval() { [native code] } is not a constructor"	/javascript/H错误处理与调试/2错误处理.html (54)
+		} catch(e) {
+			console.log(e.message); //function eval() { [native code] } is not a constructor
+			console.log(e.name); //"TypeError"
+			//TODO handle the exception
+		}
+
+		try {
+			var arr = new Array(-20);
+		} catch(e) {
+			console.log(e.message); //"Invalid array length"
+			console.log(e.name); //"RangeError"	
+			//TODO handle the exception
+		}
+		try {
+			eval("a++b");
+		} catch(e) {
+			console.log(e.message); //"SyntaxError"
+			console.log(e.name); //"SyntaxError"
+		}
+		//当你适用try catch了，浏览器会认为该错误被处理了，就不会再抛出异常
+
+		//合理使用try catch
+		//try catch适用于处理我们不能解决的错误，无法避免的错误
+
+		//与try catch匹配的还有 throw操作符，当语句执行到throw后，后面的语句将不再执行
+
+		/*throw "aaa";//"Uncaught aaa"
+		throw "bbb";//(这条语句没有得到执行)*/
+
+		//throw new Error("something bad happened")//Uncaught Error: something bad happened
+
+		//创建一个自定义错误类型
+
+		function CustomError(message) {
+			this.name = "CustomError";
+			this.message = message;
+		}
+		CustomError.prototype = new Error();
+
+		//throw new CustomError(" my customError");//"Uncaught CustomError:  my customError"
+
+		//抛出错误的时机
+		//要针对函数为什么会执行失败给出更多信息，抛出自定义错误是一种很方便的方式。
+
+		//错误（error)事件
+		//任何没有通过 try-catch 处理的错误都会触发 window 对象的 error 事件。
+		//onerror 事件处理程序都不会创建 event 对象，但它可以接收三个参数：错误消息、错误所在的 URL 和行号。
+		//要指定 onerror 事件处理程序，必须使用如下所示的 DOM0 级技术，它没有遵循“DOM2 级事件”的标准格式。
+		window.onerror = function(message, url, line) {
+				console.log(message + "：" + url + ":" + line); //a is not defined：http://127.0.0.1:8020/javascript/H%e9%94%99%e8%af%af%e5%a4%84%e7%90%86%e4%b8%8e%e8%b0%83%e8%af%95/2%e9%94%99%e8%af%af%e5%a4%84%e7%90%86.html:108"
+			}
+			//console.log(a);
+
+		//类型转换错误
+		console.log(5 == "5"); //true 
+		console.log(5 === "5"); //false 
+		console.log(1 == true); //true 
+		console.log(1 === true); //false 
+
+		//JavaScript在进行相等判断时（==）：会自动执行自动类型转换
+		//数字和其他类型:将其他类型转为数字
+		//字符和其他类型：将其他类型转字符
+
+		//容易发生类型转换错误的地方
+		//1、l流控制语句
+		function concat(str1, str2, str3) {
+			var result = str1 + str2;
+			if(str3) { //绝对不要这样!!! 
+				result += str3;
+			}
+			return result;
+		}
+		//因为上述str3为false的情况有：str未使用（undefined）、false、""、null、0
+		function concat(str1, str2, str3) {
+			var result = str1 + str2;
+			if(typeof str3 == "string") { //恰当的比较
+				result += str3;
+			}
+			return result;
+		}
+
+		//2、数据类型错误
+		//JavaScript 是松散类型的，也就是说，在使用变量和函数参数之前，不会对它们进行比较以确保它们的数据类型正确。
+
+		//不安全的函数，任何非字符串值都会导致错误
+		function getQueryString(url) {
+			var pos = url.indexOf("?");
+			if(pos > -1) {
+				return url.substring(pos + 1);
+			}
+			return "";
+		}
+
+		function getQueryString(url) {
+			if(typeof url == "string") { //通过检查类型确保安全
+				var pos = url.indexOf("?");
+				if(pos > -1) {
+					return url.substring(pos + 1);
+				}
+			}
+			return "";
+		}
+
+		//前一节提到过，在流控制语句中使用非布尔值作为条件很容易导致类型转换错误。同样，这样做也经常会导致数据类型错误。来看下面的例子
+		//不安全的函数，任何非数组值都会导致错误
+		function reverseSort(values) {
+			if(values) { //绝对不要这样!!! 
+				values.sort();
+				values.reverse();
+			}
+		}
+		//不安全的函数，任何非数组值都会导致错误
+		function reverseSort(values) {
+			if(values != null) { //绝对不要这样!!! 
+				values.sort();
+				values.reverse();
+			}
+		}
+		//还是不安全，任何非数组值都会导致错误
+		function reverseSort(values) {
+			if(typeof values.sort == "function") { //绝对不要这样!!! 
+				values.sort();
+				values.reverse();
+			}
+		}
+		//安全，非数组值将被忽略
+		function reverseSort(values) {
+			if(values instanceof Array) { //问题解决了
+				values.sort();
+				values.reverse();
+			}
+		}
+
+		//通信错误
+		/*随着 Ajax 编程的兴起（第 21 章讨论 Ajax），Web 应用程序在其生命周期内动态加载信息或功能，
+已经成为一件司空见惯的事。不过，JavaScript 与服务器之间的任何一次通信，都有可能会产生错误*/
+
+		//1\第一种通信错误与不正确的URL或发送的数据有关
+		//不正确的URL
+		//http://www.yourdomain.com/?redir=http://www.someotherdomain.com?a=b&c=d 
+		/*针对"redir="后面的所有字符串调用 encodeURIComponent()就可以解决这个问题，结果将产生
+如下字符串：*/
+		var value = "http://www.someotherdomain.com?a=b&c=d";
+		console.log(encodeURIComponent(value)); //http%3A%2F%2Fwww.someotherdomain.com%3Fa%3Db%26c%3Dd
+
+		function addQueryStringArg(url, name, value) {
+			if(url.indexOf("?") == -1) {
+				url += "?";
+			} else {
+				url += "&";
+			}
+			url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+			return url;
+		}
+		//一般情况下：服务端和客户端都会保存错误日志，如何将客户端错误日志保存到服务端
+		//服务端需要提供一个错误日志接口
+		//客户端将错误信息发送给服务端（这里使用的是image对象）
+		/*
+		 * 要建立这样一种 JavaScript 错误记录系统，首先需要在服务器上创建一个页面（或者一个服务器入
+口点），用于处理错误数据。这个页面的作用无非就是从查询字符串中取得数据，然后再将数据写入错
+误日志中。这个页面可能会使用如下所示的函数：
+		 */
+		function logError(sev, msg) {
+			var img = new Image();
+			img.src = "log.php?sev=" + encodeURIComponent(sev) + "&msg=" +
+				encodeURIComponent(msg);
+		}
+		/*
+		 * 这个 logError()函数接收两个参数：表示严重程度的数值或字符串（视所用系统而异）及错误消
+息。其中，使用了 Image 对象来发送请求，这样做非常灵活，主要表现如下几方面。
+ 所有浏览器都支持 Image 对象，包括那些不支持 XMLHttpRequest 对象的浏览器。
+ 可以避免跨域限制。通常都是一台服务器要负责处理多台服务器的错误，而这种情况下使用
+XMLHttpRequest 是不行的。
+ 在记录错误的过程中出问题的概率比较低。大多数 Ajax 通信都是由 JavaScript 库提供的包装函
+数来处理的，如果库代码本身有问题，而你还在依赖该库记录错误，可想而知，错误消息是不
+可能得到记录的。
+只要是使用 try-catch 语句，就应该把相应错误记录到日志中。来看下面的例子
+		 */
+		for(var i = 0, len = mods.length; i < len; i++) {
+			try {
+				mods[i].init();
+			} catch(ex) {
+				logError("nonfatal", "Module init failed: " + ex.message);
+			}
+		}
+	</script>
+
+</html>

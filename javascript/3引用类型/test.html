@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css" />
+<style>
+body,html{
+height: 100%;
+margin: 0;
+background-color: #EEEEEE;
+}
+
+*{
+outline: solid 1px red;
+}
+
+.warp{
+height: 400px;
+display: flex;
+}
+
+.cd{
+width: 200px;
+height: 200px;
+margin: auto;
+background-image: url(img/music.jpg);
+background-size: cover;
+border-radius: 50%;
+}
+.buttons{
+text-align: center;
+margin-top: 75px;
+color: #FFFFFF;
+}
+.buttons .fa {
+margin: 0 10px;
+text-shadow: 1px 1px 2px #333;
+cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="warp">
+<audio src="video/music.mp3" id="music" controls="controls"></audio>
+<div class="cd">
+<div class="buttons">
+<i class="fa fa-recycle"></i>
+<i class="fa fa-backward"></i>
+<i id="play" class="fa fa-play" onclick="playPause()"></i>
+<i class="fa fa-forward"></i>
+<i class="fa fa-random"></i>
+<p></p>
+<input type="range" id="vol" 
+onchange="changeVol(this.value)"
+value="0.5" min="0"  max="1" step="0.01"/>
+</div>
+</div>
+</div>
+<script>
+var music = document.getElementById("music");
+var play = document.getElementById("play");
+var vol = document.getElementById("vol");
+function playPause(){
+if(music.paused){
+music.play();
+play.classList.remove("fa-play");
+play.classList.add("fa-pause");
+}else{
+music.pause();
+play.classList.add("fa-play");
+play.classList.remove("fa-pause");
+}
+}
+
+fxunction changeVol(v){
+f
+return v;
+}
+</script>
+
+</body>
+<html>
