@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script>
+		//跨源资源共享
+		//一般情况下，AJAX因安全原因，存在一个限制，只能请求同一个域的资源，
+		//那么如何实现跨源
+
+		var xhr = new XMLHttpRequest();
+		//xhr.open("Get", "http://baidu.com", false);
+		//xhr.send(null);
+		//如果直接请求百度的话，会被拦截，有提示解决的原因，如下
+		/*
+		 * 已拦截跨源请求：同源策略禁止读取位于 http://baidu.com/ 的远程资源。（原因：CORS 头缺少 'Access-Control-Allow-Origin'）。[详细了解]
+已拦截跨源请求：同源策略禁止读取位于 http://baidu.com/ 的远程资源。（原因：CORS 请求未能成功）。[详细了解]
+NetworkError: A network error occurred. 4跨源资源共享.html:16
+		 */
+
+		//xhr.setRequestHeader("origin","http://baidu.com");
+		//xhr.send(null);
+		//如果该域是允许访问的，则返回相应头信息：Access-Control-Allow-Origin: http://www.nczonline.net 
+		//否则不相应头不存在该信息
+		
+		
+		//IE对跨源资源的实现
+		/*微软在 IE8 中引入了 XDR（XDomainRequest）类型。这个对象与 XHR 类似，但能实现安全可靠
+的跨域通信。*/
+		/*
+		 * cookie 不会随请求发送，也不会随响应返回。
+ 只能设置请求头部信息中的 Content-Type 字段。
+ 不能访问响应头部信息。
+ 只支持 GET 和 POST 请求 
+		 */
+
+		/*var xdr = new XDomainRequest();
+		xdr.onload = function() {
+			console.log(xdr.responseText);
+		};
+		xdr.onerror = function(){ 
+ alert("An error occurred."); 
+}; 
+		xdr.open("get", "http://baidu.com");
+		xdr.send(null);*/
+
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4) {
+				if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+					alert(xhr.responseText);
+				} else {
+					alert("Request was unsuccessful: " + xhr.status);
+				}
+			}
+		};
+		xhr.open("get", "http://www.somewhere-else.com/page/", true);
+		xhr.send(null);
+	</script>
+
+</html>
